@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Horizon</title>
+</head>
+<body>
+    <header>
+        <h1>Horizon</h1>
+        <nav>
+             <ul>
+                <li><a href="">Inicio</a></li>
+                <li>
+                    <button id="mostrarDias">Dias</button>
+                    <ul id="listaDias" >
+                        <li><a href="">Lunes</a></li>
+                        <li><a href="">Martes</a></li>
+                        <li><a href="">Miercoles</a></li>
+                        <li><a href="">Jueves</a></li>
+                        <li><a href="">Viernes</a></li>
+                        <li><a href="">Sabado</a></li>
+                        <li><a href="">Domingo</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <section class="seccion-formulario">
+            <button id="btnDesplegar">
+                Agregar tarea
+            </button>
+            <form action="" id="agregarTarea">
+                <label>Nombre de la tarea</label>
+                <input type="text" id="nombreTarea">
+
+                <label>Día</label>
+                <input type="date" id="diaTarea">
+
+                <label>Horario</label>
+                <input type="time" id="horaTarea">
+
+                <label>Agrega una descripción</label>
+                <textarea id="descripcionTarea" cols="30" rows="10"></textarea>
+
+                <input type="submit" value="subir" id="btnAgregarTarea">
+            </form>
+        </section>
+
+        <section class="tablero" id="tablero">
+            <article class="columna">
+                <h3>Lunes</h3>
+                <section id="lunes" class="contenedor-tareas"></section>
+            </article>
+
+            <article class="columna">
+                <h3>Martes</h3>
+                <section id="martes" class="contenedor-tareas"></section>
+            </article>
+
+            <article class="columna">
+                <h3>Miercoles</h3>
+                <section id="miercoles" class="contenedor-tareas"></section>
+            </article>
+
+            <article class="columna">
+                <h3>Jueves</h3>
+                <section id="jueves" class="contenedor-tareas"></section>
+            </article>
+
+            <article class="columna">
+                <h3>Viernes</h3>
+                <section id="viernes" class="contenedor-tareas"></section>
+            </article>
+
+            <article class="columna">
+                <h3>Sabado</h3>
+                <section id="sabado" class="contenedor-tareas"></section>  
+            </article>
+
+            <article class="columna">
+                <h3>Domingo</h3>
+                <section id="domingo" class="contenedor-tareas"></section>
+            </article>
+        </section>
+
+        <section id="descripcion">
+            
+        </section>
+    </main>
+    <footer>
+        <section>
+            <a href="http://">Inicio</a>
+            <a href="http://">Contactos</a>
+        </section>
+        <section>
+            <h4>¿Quienes somos?</h4>
+            <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Ducimus possimus ipsam itaque beatae aut eum commodi, inventore minus atque natus suscipit doloribus sequi, eligendi molestias consectetur laborum! Sapiente, a similique.</p>
+        </section>
+        <section>
+            <h4>Deja un comentario!</h4>
+            <label for="">Tu email</label>
+            <input type="email" name="" id="">
+            <label for="">Deja alguna duda/queja y pronto nuestro equipo se comunicara con usted!</label>
+            <textarea name="" id="" cols="30" rows="3"></textarea>
+        </section>
+    </footer>
+    <script src="index.js"></script>
+</body>
+</html>
