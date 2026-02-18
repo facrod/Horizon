@@ -170,17 +170,47 @@ main {
     display: flex;
     gap: 1rem;
     height: 70vh;
+    overflow-x: auto;  
+    overflow-y: hidden;
+    scroll-behavior: smooth;
+
+}
+.tablero::-webkit-scrollbar {
+    height: 8px;
+}
+
+.tablero::-webkit-scrollbar-track {
+    background: #1e1e1e;
+}
+
+.tablero::-webkit-scrollbar-thumb {
+    background: #555;
+    border-radius: 10px;
+}
+
+.tablero::-webkit-scrollbar-thumb:hover {
+    background: #888;
 }
 
 .columna {
     background-color: #2a2a2a;
-    flex: 1;
+    min-width: 18rem;  
+    flex: 0 0 18rem;   
     padding: 1rem;
     box-shadow: 5px 3px 10px rgb(63, 63, 63);
     transition: transform 0.2s ease, box-shadow 0.2s ease;
     border-radius: 1rem;
-    overflow-y: scroll;
-
+    overflow-y: auto;
+}
+.columna::-webkit-scrollbar {
+    width: 8px;
+}
+.columna::-webkit-scrollbar-thumb {
+    background: #555;
+    border-radius: 10px;
+}
+.columna::-webkit-scrollbar-thumb:hover {
+    background: #888;
 }
 
 .columna:hover {
