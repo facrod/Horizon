@@ -169,29 +169,24 @@ main {
 .tablero {
     display: flex;
     gap: 1rem;
-    height: 70vh;
+    height: 80vh;
     overflow-x: auto;  
-    overflow-y: hidden;
+    padding: 15px 0;
     scroll-behavior: smooth;
-
 }
 .tablero::-webkit-scrollbar {
     height: 8px;
 }
-
 .tablero::-webkit-scrollbar-track {
     background: #1e1e1e;
 }
-
 .tablero::-webkit-scrollbar-thumb {
     background: #555;
     border-radius: 10px;
 }
-
 .tablero::-webkit-scrollbar-thumb:hover {
     background: #888;
 }
-
 .columna {
     background-color: #2a2a2a;
     min-width: 18rem;  
@@ -201,6 +196,11 @@ main {
     transition: transform 0.2s ease, box-shadow 0.2s ease;
     border-radius: 1rem;
     overflow-y: auto;
+}
+.columna:hover {
+    transform: translateY(-5px) scale(1.02);
+    z-index: 10;
+    box-shadow: 0 0px 20px rgba(255, 255, 255, 0.3);
 }
 .columna::-webkit-scrollbar {
     width: 8px;
@@ -213,10 +213,7 @@ main {
     background: #888;
 }
 
-.columna:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 0px 20px rgba(255, 255, 255, 0.3);
-}
+
 
 .contenedor-tareas {
     display: flex;
@@ -241,25 +238,123 @@ main {
 /*Tercera seccion, descripcion*/
 
 #descripcion {
+    position: relative;
     background-color: #e2e0e0;
-    margin: 3rem;
-    padding: 2rem;
+    margin: 0;
+    padding: 0;
     border-radius: .5rem;
     color: black;
-
     opacity: 0;
-    transform: translateY(10px);
-    pointer-events: none;
+    max-height: 0;
+    overflow: hidden;
+    transform: translateY(1rem);
+    transition: opacity .3s ease, transform .3s ease, max-height .8s ease, margin .8s ease, padding .8s ease;
 
-    transition: opacity 0.3s ease, transform 0.3s ease;
 }
-
 #descripcion.activo {
+    margin: 3rem .5rem ;
+    padding: 2rem;
+    max-height: 30rem;
     opacity: 1;
     transform: translateY(0);
     pointer-events: auto;
 }
-
+#descripcion article.info-descripcion {
+    padding: 1rem;
+}
+#descripcion article.dia-hora-descripcion {
+    padding: 1rem;
+}
+#descripcion article.acciones-descripcion {
+    display: flex;
+    align-items: center;
+    padding: 1rem;
+}
+#descripcion button.accion-editar {
+    display: flex;
+    align-items: center;
+    margin-right: 1rem;
+    padding: .5rem;
+    border: none;
+    border-radius: .7rem;
+    background-color: #dad7d7;
+    transition: background-color .4s ease;
+}
+#descripcion button.accion-editar:hover {
+    background-color: white;
+    transition: background-color .4s ease;
+}
+#descripcion button.accion-eliminar {
+    display: flex;
+    align-items: center;
+    padding: .5rem;
+    border: none;
+    border-radius: .7rem;
+    background-color: #dad7d7;
+    transition: background-color .4s ease;
+}
+#descripcion button.accion-eliminar:hover {
+    background-color: white;
+    transition: background-color .4s ease;
+}
+#descripcion label.custom-checkbox{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem;
+    margin-left: auto;
+    background-color: #2563eb;
+    font-weight: 500;
+    border-radius: 1rem;
+    color: white;
+    transition: background-color .4s ease;
+}
+#descripcion label.custom-checkbox:hover{
+    background-color: #1a44a0;
+    transition: background-color .4s ease;
+}
+.custom-checkbox input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+}
+.checkmark {
+    height: 1.2rem; 
+    width: 1.2rem;
+    background-color: #cecccc; 
+    border-radius: .4rem; 
+    display: inline-flex; 
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    transition: all 0.3s;
+    cursor: pointer;
+    margin-right: .5rem;
+}
+.checkmark img {
+    display: none;
+}
+input:checked + .checkmark img {
+    display: block;
+}
+input:checked + .checkmark {
+    background-color: rgb(0, 110, 0);
+}
+img.cerrar {
+    position: absolute;
+    right: 1rem;
+    top: 1rem;
+    cursor: pointer;
+    border-radius: 5rem;
+    width: fit-content;
+    transition: background-color .4s ease;
+}
+img.cerrar:hover {
+    background-color: white;
+    transition: background-color .4s ease;
+}
 /*Tercera seccion, descripcion*/
 
 /*footer*/

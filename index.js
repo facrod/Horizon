@@ -24,6 +24,8 @@ let descripcionTarea = document.getElementById("descripcionTarea");
 let btnAgregarTarea = document.getElementById("btnAgregarTarea");
 
 let tareas = JSON.parse(localStorage.getItem("tareas")) || [];
+const tablero = document.getElementById("tablero");
+const seccionDescripcion = document.getElementById("descripcion");
 
 //LOGICA PARA PINTAR TAREAS EN LAS CARDS, YA SEA AL INICIAR LA PAGINA O AL CARGAR
 function pintarTarea(tarea) {
@@ -38,8 +40,7 @@ function pintarTarea(tarea) {
         <article class="tarjeta" id="${tarea.id}">    
             <h4> Tarea </h4>        
             <p> ${tarea.tarea} </p>
-            <h4> Descripcion </h4>
-            <p> ${tarea.descripcion} </p>
+            <h4> Horario </h4>
             <p> ${tarea.hora} </p>
         </article>
     `
@@ -52,12 +53,10 @@ btnAgregarTarea.addEventListener("click", (e)=>{
     if (!diaTarea.value) {
         alert("Seleccioná una fecha");
         return;
-    }
-    let fechaParseada = new Date(diaTarea.value)
-    
+    }    
     let tarea = {
         tarea: nombreTarea.value,
-        dia: fechaParseada,
+        dia: diaTarea.value,
         hora: horaTarea.value,
         descripcion: descripcionTarea.value,
         estado: false,
@@ -81,8 +80,6 @@ tareas.forEach(tarea => {
     pintarTarea(tarea)
 });
 
-const tablero = document.getElementById("tablero");
-const seccionDescripcion = document.getElementById("descripcion");
 
 tablero.addEventListener("click", (e) => {
 
@@ -97,13 +94,35 @@ tablero.addEventListener("click", (e) => {
     let diaParseado = tareaEncontrada.dia.split("T");
 
     const nuevoContenido = `
-        <h3>${tareaEncontrada.tarea}</h3>
-        <p>${tareaEncontrada.descripcion}</p>
-        <p>${diaParseado[0]}</p>
-        <p>${tareaEncontrada.hora}</p>
-        <p>Estado: ${mensaje}</p>
-    `;
+        <img src="img/cerrar.png" class="cerrar" id="close" alt="cerrar">
 
+        <article class="info-descripcion">
+            <h3>${tareaEncontrada.tarea}</h3>
+            <p>${tareaEncontrada.descripcion}</p>
+        </article>
+        <article class="dia-hora-descripcion">
+            <p>${diaParseado[0]}</p>
+            <p>${tareaEncontrada.hora}</p>
+            <p>Estado: ${mensaje}</p>
+        </article>
+        <article class="acciones-descripcion">
+            <button class="accion-editar">
+                <p>editar</p>    
+                <img src="img/editar.png" alt="editar">
+            </button>
+            <button class="accion-eliminar">
+                <p>eliminar</p>    
+                <img src="img/eliminar.png" alt="elimininar">
+            </button>
+            <label class="custom-checkbox" id="${tareaEncontrada.id}">
+                <input type="checkbox" >
+                <span class="checkmark"> 
+                    <img src="img/checkBlanco.png" alt="completado"> 
+                </span>
+                Estado
+            </label>
+        </article>
+        `;
 
     //REPASAR FUERTEMENTE ESTO
     //si esta visible prendemos(fade-out)
@@ -126,7 +145,14 @@ tablero.addEventListener("click", (e) => {
     }
 
 });
- /*
+
+seccionDescripcion.addEventListener("click", (e) => {
+    if (e.target.closest(".cerrar")) {
+        seccionDescripcion.classList.remove("activo");
+    }
+    console.log(e.target)
+});
+/*
     let tareaClick = document.getElementById(tareas.id)
     const seccionDescripcion = document.getElementById("seccion-descripcion")
     tareaClick.addEventListener("click", ()=>{
@@ -134,5 +160,7 @@ tablero.addEventListener("click", (e) => {
             <h3> ${tareas.tarea}
 
     `
+
+    let estadoCheckbox = document.getElementById("")
     })
     */
