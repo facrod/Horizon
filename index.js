@@ -27,6 +27,8 @@ let tareas = JSON.parse(localStorage.getItem("tareas")) || [];
 const tablero = document.getElementById("tablero");
 const seccionDescripcion = document.getElementById("descripcion");
 
+const diasSemana = ["domingo", "lunes", "martes", "miercoles", "jueves", "viernes", "sabado"]
+
 //LOGICA PARA PINTAR TAREAS EN LAS CARDS, YA SEA AL INICIAR LA PAGINA O AL CARGAR
 function pintarTarea(tarea) {
 
@@ -47,13 +49,25 @@ function pintarTarea(tarea) {
 }
 
 
+let inputs = [nombreTarea, diaTarea, horaTarea, descripcionTarea];
 
-btnAgregarTarea.addEventListener("click", (e)=>{
-    e.preventDefault()
-    if (!diaTarea.value) {
-        alert("Seleccioná una fecha");
-        return;
-    }    
+btnAgregarTarea.addEventListener("click", (e) => {
+    e.preventDefault();
+    let formularioValido = true;
+    inputs.forEach(input => {
+        if (!input.value.trim()) {
+            input.style.border = "1.5px solid #ff4d4d"; 
+            formularioValido = false;
+        } else {
+            input.style.border = "none"; 
+        }
+    });
+
+    if (!formularioValido) {
+        alert("Faltan rellenar campos")
+        return; 
+    }
+
     let tarea = {
         tarea: nombreTarea.value,
         dia: diaTarea.value,
@@ -61,20 +75,27 @@ btnAgregarTarea.addEventListener("click", (e)=>{
         descripcion: descripcionTarea.value,
         estado: false,
         id: Date.now(),
-    }
+    };
+
     tareas.push(tarea);
-    localStorage.setItem("tareas", JSON.stringify(tareas))
+    localStorage.setItem("tareas", JSON.stringify(tareas));
 
-    pintarTarea(tarea)
+    pintarTarea(tarea);
 
-})
+    inputs.forEach(input => {
+        input.value = "";
+        input.style.border = "none"; 
+    });
+    
+    agregarTarea.classList.remove("activo");
+    
+});
 
 
 //fin logica
 
 //cargado de tareas en el tablero
 
-const diasSemana = ["domingo", "lunes", "martes", "miercoles", "jueves", "viernes", "sabado"]
 
 tareas.forEach(tarea => {
     pintarTarea(tarea)
@@ -98,24 +119,28 @@ tablero.addEventListener("click", (e) => {
 
         <article class="info-descripcion">
             <h3>${tareaEncontrada.tarea}</h3>
+                <input type="text" id="tarea" class="modificarT" hidden>
             <p>${tareaEncontrada.descripcion}</p>
-        </article>
+                <input type="text" id="descripcionInput" class="modificarT" hidden>
+            </article>
         <article class="dia-hora-descripcion">
             <p>${diaParseado[0]}</p>
+                <input type="date" id="dia" class="modificarT" hidden>
             <p>${tareaEncontrada.hora}</p>
+                <input type="time" id="hora" class="modificarT" hidden>
             <p>Estado: ${mensaje}</p>
         </article>
         <article class="acciones-descripcion">
-            <button class="accion-editar">
+            <button class="accion-editar" data-id="${tareaEncontrada.id}">
                 <p>editar</p>    
                 <img src="img/editar.png" alt="editar">
             </button>
-            <button class="accion-eliminar">
+            <button class="accion-eliminar" data-id="${tareaEncontrada.id}">
                 <p>eliminar</p>    
                 <img src="img/eliminar.png" alt="elimininar">
             </button>
-            <label class="custom-checkbox" id="${tareaEncontrada.id}">
-                <input type="checkbox" >
+            <label class="custom-checkbox" data-id="${tareaEncontrada.id}">
+                <input type="checkbox" ${tareaEncontrada.estado ? "checked" : ""}>
                 <span class="checkmark"> 
                     <img src="img/checkBlanco.png" alt="completado"> 
                 </span>
@@ -133,6 +158,12 @@ tablero.addEventListener("click", (e) => {
         const handler = () => {
             seccionDescripcion.innerHTML = nuevoContenido;
             seccionDescripcion.classList.add("activo");
+            setTimeout(() => {
+                    seccionDescripcion.scrollIntoView({ 
+                        behavior: 'smooth', 
+                        block: 'center' 
+                    });
+                }, 300);
             seccionDescripcion.removeEventListener("transitionend", handler);
         };
 
@@ -142,6 +173,13 @@ tablero.addEventListener("click", (e) => {
         // Si estaba apagado, prendemos
         seccionDescripcion.innerHTML = nuevoContenido;
         seccionDescripcion.classList.add("activo");
+        setTimeout(() => {
+                seccionDescripcion.scrollIntoView({ 
+                    behavior: 'smooth', 
+                    block: 'center' 
+                });
+            }, 200);
+
     }
 
 });
@@ -149,8 +187,67 @@ tablero.addEventListener("click", (e) => {
 seccionDescripcion.addEventListener("click", (e) => {
     if (e.target.closest(".cerrar")) {
         seccionDescripcion.classList.remove("activo");
+        return;
     }
-    console.log(e.target)
+
+            // EDITAR
+
+    if (e.target.closest(".accion-editar")) {
+        let idTarea = e.target.closest(".accion-editar").dataset.id;
+        let tar = tareas.find(t => t.id == Number(idTarea));
+        let elemento = document.getElementsByClassName("modificarT")
+
+        for (let index = 0; index < elemento.length; index++) {
+            //let elementoAnterior = document.getElementsByClassName("modificarT")[index].previousElementSibling
+            elemento[index].previousElementSibling.hidden = true
+            elemento[index].removeAttribute("hidden")
+            //elemento[index].value = elementoAnterior.innerHTML
+            switch (elemento[index].id) {
+                case "tarea":
+                        elemento[index].value = tar.tarea
+                    break;
+                case "descripcionInput":
+                        elemento[index].value = tar.descripcion
+                break
+                case "dia":
+                        elemento[index].value = tar.dia
+                break;
+                case "hora":
+                        elemento[index].value = tar.hora
+                    break;
+                default:
+                    break;
+            }
+        }
+        
+    
+        //ELIMINAR
+    }
+    if (e.target.closest(".accion-eliminar")) {
+        let idTarea = e.target.closest(".accion-eliminar").dataset.id;
+        tareas = tareas.filter (t => t.id !== Number(idTarea))        
+        localStorage.setItem("tareas", JSON.stringify(tareas));
+
+        const tarjeta = document.getElementById(idTarea);
+        if (tarjeta) {
+            tarjeta.remove();
+        }
+        seccionDescripcion.classList.remove("activo");
+    }
+});
+
+seccionDescripcion.addEventListener("change", (e) => {
+    if (!e.target.matches('input[type="checkbox"]')) return;
+
+    const label = e.target.closest(".custom-checkbox");
+    const tareaEncontrada = tareas.find(t => t.id === Number(label.dataset.id));
+    if (!tareaEncontrada) return;
+
+    tareaEncontrada.estado = e.target.checked;
+
+    localStorage.setItem("tareas", JSON.stringify(tareas));
+
+    console.log(tareaEncontrada);
 });
 /*
     let tareaClick = document.getElementById(tareas.id)
