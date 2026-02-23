@@ -111,6 +111,11 @@ main {
     background: linear-gradient(to bottom, #2a2a2a, #1d1d1d);
     box-shadow: 0px 4px 10px rgb(39, 39, 39);
     border-radius: 1rem;
+    width: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
 }
 
 #agregarTarea.activo {
@@ -118,18 +123,28 @@ main {
     padding: 1rem;
 }
 #agregarTarea input {
+    width: 80%;
+    outline: none;
+    font-size: 1rem;
+    margin: 1rem 0 1rem 0;
     background-color: rgb(202, 200, 200);
     border: none;
-    border-radius: .2rem;
-    padding: .2rem;   
+    border-radius: .4rem;
+    padding: .5rem;   
 }
 #agregarTarea textarea {
+    width: 80%;
+    outline: none;
+    font-family: 'miFuente', sans-serif; 
+    font-size: 1rem;
+    resize: vertical;
+    margin: 1rem 0 0 0;
     background-color: rgb(202, 200, 200);
     border: none;
-    border-radius: .2rem;
-    padding: .2rem;
+    border-radius: .4rem;
+    padding: .5rem;
 }
-#agregarTarea.activo input[type="submit"] {
+#agregarTarea input[type="submit"] {
     background-color: #2563eb;
     border: none;
     color: white;
@@ -138,7 +153,7 @@ main {
     cursor: pointer;
 }
 
-#agregarTarea.activo input[type="submit"]:hover {
+#agregarTarea input[type="submit"]:hover {
     background-color: #1a44a0;
     transition: .3s ease;
 }
@@ -214,7 +229,6 @@ main {
 }
 
 
-
 .contenedor-tareas {
     display: flex;
     flex-direction: column
@@ -246,10 +260,20 @@ main {
     color: black;
     opacity: 0;
     max-height: 0;
-    overflow: hidden;
+    overflow-y: scroll;
+    overflow: auto;
     transform: translateY(1rem);
     transition: opacity .3s ease, transform .3s ease, max-height .8s ease, margin .8s ease, padding .8s ease;
-
+}
+#descripcion::-webkit-scrollbar {
+    width: 8px;
+}
+#descripcion::-webkit-scrollbar-thumb {
+    background: #555;
+    border-radius: 10px;
+}
+#descripcion::-webkit-scrollbar-thumb:hover {
+    background: #2563eb; 
 }
 #descripcion.activo {
     margin: 3rem .5rem ;
@@ -355,18 +379,54 @@ img.cerrar:hover {
     background-color: white;
     transition: background-color .4s ease;
 }
+
+
+#inputsModificar {
+    display: none; 
+    flex-direction: column;
+}
+#inputsModificar.visible {
+    display: flex; 
+}
+#inputsModificar input {
+    margin-bottom: 1rem;
+    padding: .5rem;
+    border: none;
+    width: max-content;
+    outline: none; 
+
+}
+#inputsModificar textarea {
+    width: 100%;
+    min-height: 1rem;
+    padding: .4rem;
+    border: 1px solid #ccc;
+    border-radius: .3rem;
+    background-color: #f9f9f9;
+    font-family: 'miFuente', sans-serif; 
+    font-size: 1rem;
+    color: #333;
+    resize: vertical;
+    outline: none; 
+    box-sizing: border-box; 
+}
+#inputsModificar input[type="submit"] {
+    background-color: #2563eb;
+    color: white;
+    border-radius: 1rem;
+    padding: 1rem;
+    align-self: center;
+    transition: background .3s ease, font-weight .3s ease;
+}
+#inputsModificar input[type="submit"]:hover {
+    background-color: #1a44a0;
+    font-weight: 500;
+}
+
 /*Tercera seccion, descripcion*/
 
 /*footer*/
-form {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-}
-form > * {
-    margin: 0.5rem 0 0.5rem 0;
-}
+
 footer {
     display: flex;
     background-color: #0D0D0D;
@@ -375,11 +435,14 @@ footer {
 footer a {
     text-decoration: none;
     color: white;
+    transition: font-weight .3s ease;
 }
-footer > *{
-    padding: 1rem;
+footer a:hover{
+    font-weight: 500;
 }
+
 footer section:nth-child(1) {
+    padding: 1rem;
     width: 15%;
     display: flex;
     flex-direction: column;
@@ -388,6 +451,7 @@ footer section:nth-child(1) {
 
 }
 footer section:nth-child(2) {
+    padding: 1rem;
     width: 70%;
     display: flex;
     flex-direction: column;
@@ -396,18 +460,61 @@ footer section:nth-child(2) {
 
 }
 footer section:nth-child(3) {
+    padding: 1rem;
     width: 15%;
+}
+footer section:nth-child(3) form {
     display: flex;
     flex-direction: column;
 }
-
-footer section:nth-child(3) > *{
-    margin: .2rem;
+footer section:nth-child(3) form label{
+    margin: 1rem 0 .3rem 0;
+}
+footer section:nth-child(3) form textarea{
+    outline: none;
+    resize: vertical;;
 }
 /*footer*/
 
-
-
+@media (max-width: 480px) {
+    footer {
+        flex-direction: column;
+        align-items: center;
+    }
+    footer section:nth-child(1) {
+        padding: 3rem;
+    }
+    footer section:nth-child(3) {
+        padding: 3rem;
+    }
+    footer section:nth-child(3){
+        width: 80%;
+    }
+    .acciones-descripcion {
+        flex-direction: column;
+    }
+    .acciones-descripcion > * {
+        margin: 1rem;
+    }
+    .acciones-descripcion label{
+        margin-right: auto;
+    }
+}
+@media (max-width: 981px) {
+    footer {
+        flex-direction: column;
+        align-items: center;
+    }
+    footer section:nth-child(1) {
+        padding: 3rem;
+    }
+    footer section:nth-child(3) {
+        padding: 3rem;
+    }
+    footer section:nth-child(3){
+        width: 80%;
+    }
+}
 
 
 
