@@ -30,6 +30,7 @@ const seccionDescripcion = document.getElementById("descripcion");
 const diasSemana = ["domingo", "lunes", "martes", "miercoles", "jueves", "viernes", "sabado"]
 
 //LOGICA PARA PINTAR TAREAS EN LAS CARDS, YA SEA AL INICIAR LA PAGINA O AL CARGAR
+
 function pintarTarea(tarea) {
 
     let dia = new Date(tarea.dia)
@@ -111,25 +112,31 @@ tablero.addEventListener("click", (e) => {
     const tareaEncontrada = tareas.find(t => t.id === tareaId);
     if (!tareaEncontrada) return;
 
-    let mensaje = tareaEncontrada.estado ? "Completa" : "Incompleta";
     let diaParseado = tareaEncontrada.dia.split("T");
 
     const nuevoContenido = `
         <img src="img/cerrar.png" class="cerrar" id="close" alt="cerrar">
-
-        <article class="info-descripcion">
-            <h3>${tareaEncontrada.tarea}</h3>
-                <input type="text" id="tarea" class="modificarT" hidden>
-            <p>${tareaEncontrada.descripcion}</p>
-                <input type="text" id="descripcionInput" class="modificarT" hidden>
+        
+        <section id="seccionDescripcionInfo">
+            <article class="info-descripcion">
+                <h3>${tareaEncontrada.tarea}</h3>
+                <p>${tareaEncontrada.descripcion}</p>    
             </article>
-        <article class="dia-hora-descripcion">
-            <p>${diaParseado[0]}</p>
-                <input type="date" id="dia" class="modificarT" hidden>
-            <p>${tareaEncontrada.hora}</p>
-                <input type="time" id="hora" class="modificarT" hidden>
-            <p>Estado: ${mensaje}</p>
-        </article>
+            <article class="dia-hora-descripcion">
+                <p>${diaParseado[0]}</p>
+                <p>${tareaEncontrada.hora}</p>
+                <p class="estadoMsj">Estado: ${tareaEncontrada.estado ? "Completa" : "incompleta"}</p>
+            </article>
+        </section>
+        <section id="inputsModificar" hidden>
+            <input type="text" id="tareaModificada" class="modificarT" >
+            <input type="text" id="descripcionInput" class="modificarT" >
+            <input type="date" id="diaModificado" class="modificarT" >
+            <input type="time" id="horaModificada" class="modificarT" >
+            <input type="button" value="modificar" class="modificarT" id="btnModificar">
+        </section>
+        
+
         <article class="acciones-descripcion">
             <button class="accion-editar" data-id="${tareaEncontrada.id}">
                 <p>editar</p>    
@@ -148,6 +155,7 @@ tablero.addEventListener("click", (e) => {
             </label>
         </article>
         `;
+
 
     //REPASAR FUERTEMENTE ESTO
     //si esta visible prendemos(fade-out)
@@ -195,34 +203,83 @@ seccionDescripcion.addEventListener("click", (e) => {
     if (e.target.closest(".accion-editar")) {
         let idTarea = e.target.closest(".accion-editar").dataset.id;
         let tar = tareas.find(t => t.id == Number(idTarea));
-        let elemento = document.getElementsByClassName("modificarT")
+        let elemento = document.getElementById("inputsModificar")
+        elemento.hidden = false
+        let inputsDescripcion = document.getElementById("seccionDescripcionInfo")
+        inputsDescripcion.hidden = true
+        document.getElementById("tareaModificada").value = tar.tarea;
+        document.getElementById("descripcionInput").value = tar.descripcion;
+        document.getElementById("diaModificado").value = tar.dia;
+        document.getElementById("horaModificada").value = tar.hora;
 
-        for (let index = 0; index < elemento.length; index++) {
-            //let elementoAnterior = document.getElementsByClassName("modificarT")[index].previousElementSibling
-            elemento[index].previousElementSibling.hidden = true
-            elemento[index].removeAttribute("hidden")
-            //elemento[index].value = elementoAnterior.innerHTML
-            switch (elemento[index].id) {
-                case "tarea":
-                        elemento[index].value = tar.tarea
-                    break;
-                case "descripcionInput":
-                        elemento[index].value = tar.descripcion
-                break
-                case "dia":
-                        elemento[index].value = tar.dia
-                break;
-                case "hora":
-                        elemento[index].value = tar.hora
-                    break;
-                default:
-                    break;
-            }
+        //Empezando lógica para guardar los valores editados en la misma tarea
+
+        let btnModificar = document.getElementById("btnModificar")
+        btnModificar.onclick = () => {
+            let tareaModificada = document.getElementById("tareaModificada").value
+            let descripcionModificada = document.getElementById("descripcionInput").value
+            let diaModificado = document.getElementById("diaModificado").value
+            let horaModifcada = document.getElementById("horaModificada").value
+
+            tar.tarea = tareaModificada;
+            tar.descripcion = descripcionModificada;
+            tar.dia = diaModificado;
+            tar.hora = horaModifcada
+            localStorage.setItem("tareas", JSON.stringify(tareas));
+
+            const nuevoContenido = `
+            <img src="img/cerrar.png" class="cerrar" id="close" alt="cerrar">
+            
+            <section id="seccionDescripcionInfo">
+                <article class="info-descripcion">
+                    <h3>${tar.tarea}</h3>
+                    <p>${tar.descripcion}</p>    
+                </article>
+                <article class="dia-hora-descripcion">
+                    <p>${tar.dia}</p>
+                    <p>${tar.hora}</p>
+                    <p class="estadoMsj">Estado: ${tar.estado ? "Completa" : "incompleta"}</p>
+                </article>
+            </section>
+            <section id="inputsModificar" hidden>
+                <input type="text" id="tareaModificada" class="modificarT" >
+                <input type="text" id="descripcionInput" class="modificarT" >
+                <input type="date" id="diaModificado" class="modificarT" >
+                <input type="time" id="horaModificada" class="modificarT" >
+                <input type="button" value="modificar" class="modificarT" id="btnModificar">
+            </section>
+            
+
+            <article class="acciones-descripcion">
+                <button class="accion-editar" data-id="${tar.id}">
+                    <p>editar</p>    
+                    <img src="img/editar.png" alt="editar">
+                </button>
+                <button class="accion-eliminar" data-id="${tar.id}">
+                    <p>eliminar</p>    
+                    <img src="img/eliminar.png" alt="elimininar">
+                </button>
+                <label class="custom-checkbox" data-id="${tar.id}">
+                    <input type="checkbox" ${tar.estado ? "checked" : ""}>
+                    <span class="checkmark"> 
+                        <img src="img/checkBlanco.png" alt="completado"> 
+                    </span>
+                    Estado
+                </label>
+            </article>
+            `;
+            seccionDescripcion.innerHTML = "";
+            seccionDescripcion.innerHTML = nuevoContenido;
+            elemento.hidden = true
+            inputsDescripcion.hidden = false
+            let tarjetaTablero = document.getElementById(`${tar.id}`)
+            tarjetaTablero.remove()
+            pintarTarea(tar)
         }
-        
-    
-        //ELIMINAR
     }
+
+            //ELIMINAR
+
     if (e.target.closest(".accion-eliminar")) {
         let idTarea = e.target.closest(".accion-eliminar").dataset.id;
         tareas = tareas.filter (t => t.id !== Number(idTarea))        
@@ -246,6 +303,12 @@ seccionDescripcion.addEventListener("change", (e) => {
     tareaEncontrada.estado = e.target.checked;
 
     localStorage.setItem("tareas", JSON.stringify(tareas));
+    let msjEstado = document.getElementsByClassName("estadoMsj")
+    if (e.target.checked) {
+        msjEstado[0].textContent = "Estado: Completa";
+    } else {
+        msjEstado[0].textContent = "Estado: Incompleta";
+    }
 
     console.log(tareaEncontrada);
 });
