@@ -186,7 +186,7 @@ main {
     gap: 1rem;
     height: 80vh;
     overflow-x: auto;  
-    padding: 15px 0;
+    padding: 2.5rem 0;
     scroll-behavior: smooth;
 }
 .tablero::-webkit-scrollbar {
@@ -490,15 +490,26 @@ footer section:nth-child(3) form textarea{
     footer section:nth-child(3){
         width: 80%;
     }
-    .acciones-descripcion {
-        flex-direction: column;
+ 
+.acciones-descripcion {
+        display: flex; /* Quitamos el display: none previo */
+        flex-direction: column; /* Apilamos uno arriba del otro */
+        align-items: stretch; /* OBLIGA a que todos midan lo mismo de ancho */
+        gap: 1rem; /* Espacio uniforme entre botones */
+        padding: 1rem;
     }
-    .acciones-descripcion > * {
-        margin: 1rem;
+
+    /* Reseteamos los botones para que no tengan márgenes raros */
+    #descripcion button.accion-editar, 
+    #descripcion button.accion-eliminar, 
+    #descripcion label.custom-checkbox {
+        margin: 0; /* Quitamos el margin-left: auto y el margin-right */
+        width: 100%; /* Que ocupen todo el ancho del contenedor */
+        justify-content: center; /* Centramos el texto/iconos adentro */
+        box-sizing: border-box;
     }
-    .acciones-descripcion label{
-        margin-right: auto;
-    }
+
+
     #agregarTarea.activo {
         width: 95%;
     }

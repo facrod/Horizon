@@ -59,6 +59,16 @@ function pintarTarea(tarea) {
         </article>
     `
 }
+function refrescarTablero() {
+    // 1. Limpiamos todas las secciones de los días primero
+    diasSemana.forEach(dia => {
+        const section = document.getElementById(dia);
+        if (section) section.innerHTML = ``; 
+    });
+
+    // 2. Pintamos todas las tareas del array (que ya está ordenado)
+    tareas.forEach(tarea => pintarTarea(tarea));
+}
 function reenderizarTarea(tarjeta) {
     let nuevoContenido = `
         <img src="img/cerrar.png" class="cerrar" id="close" alt="cerrar">
@@ -143,10 +153,10 @@ formAgregar.addEventListener("submit", (e) => {
     };
 
     tareas.push(tarea);
+    tareas.sort((a, b) => a.hora.localeCompare(b.hora)); 
     localStorage.setItem("tareas", JSON.stringify(tareas));
 
-    pintarTarea(tarea);
-
+    refrescarTablero(); 
     formAgregar.reset(); 
     agregarTarea.classList.remove("activo");
 });
@@ -158,6 +168,7 @@ formAgregar.addEventListener("submit", (e) => {
 
 
 tareas.forEach(tarea => {
+
     pintarTarea(tarea)
 });
 
@@ -261,11 +272,10 @@ seccionDescripcion.addEventListener("submit", (e) => {
         tar.dia = document.getElementById("diaModificado").value;
         tar.hora = document.getElementById("horaModificada").value;
 
+        tareas.sort((a, b) => a.hora.localeCompare(b.hora));
         localStorage.setItem("tareas", JSON.stringify(tareas));
-
-        let tarjetaTablero = document.getElementById(`${tar.id}`);
-        if (tarjetaTablero) tarjetaTablero.remove();
-        pintarTarea(tar);
+            
+        refrescarTablero(); 
 
         seccionDescripcion.innerHTML = reenderizarTarea(tar);
     }
