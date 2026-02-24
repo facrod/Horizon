@@ -499,6 +499,9 @@ footer section:nth-child(3) form textarea{
     .acciones-descripcion label{
         margin-right: auto;
     }
+    #agregarTarea.activo {
+        width: 95%;
+    }
 }
 @media (max-width: 981px) {
     footer {
