@@ -63,7 +63,7 @@ function pintarTarea(tarea) {
     let diaSection = document.getElementById(diasSemana[diaIndex])
 
     diaSection.innerHTML += `
-    <section class="tarjeta">
+    <section class="tarjeta" data-id="${tarea.id}">
         <article class="tarjetaI" id="${tarea.id}">    
             <h4> Tarea </h4>        
             <p> ${tarea.tarea} </p>
@@ -308,9 +308,9 @@ seccionDescripcion.addEventListener("click", (e) => {
         let idTarea = e.target.closest(".accion-eliminar").dataset.id;
         tareas = tareas.filter (t => t.id !== Number(idTarea))        
         guardarDatos()
-        const tarjeta = document.getElementById(idTarea);
-        if (tarjeta) {
-            tarjeta.remove();
+        const articleTarea = document.getElementById(idTarea);
+        if (articleTarea) {
+            articleTarea.parentElement.remove();
         }
         seccionDescripcion.classList.remove("activo");
     }
