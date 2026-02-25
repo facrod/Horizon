@@ -11,7 +11,7 @@
 }
 body {
     min-height: 100vh;
-    color: white;
+    color: #F8FAFC;
     font-family: 'miFuente', sans-serif;
     font-weight: 100;
 }
@@ -35,7 +35,7 @@ header {
     padding: 1rem;
     flex-direction: column;
     align-items: center;
-    background-color: #0D0D0D;
+    background-color: #334155;
 }
 nav {
     display: flex;
@@ -67,7 +67,7 @@ nav ul li {
     top: 100%;
     left: 0;
     
-    background: #2a2a2a;
+    background: #334155;
     list-style: none;
     padding: 0.5rem 0;
     border-radius: 8px;
@@ -100,7 +100,7 @@ nav ul li {
 main {
     flex: 1;
     padding: 1rem;
-    background-color: #121212;
+    background-color: #0F172A;
 }
 
 /*Primera seccion*/
@@ -108,9 +108,8 @@ main {
     max-height: 0;
     overflow: hidden;
     transition: 1s ease;
-    background: linear-gradient(to bottom, #2a2a2a, #1d1d1d);
-    box-shadow: 0px 4px 10px rgb(39, 39, 39);
-    border-radius: 1rem;
+    background-color: #334155;
+    border-radius: 1rem; 
     width: 50%;
     display: flex;
     justify-content: center;
@@ -119,6 +118,7 @@ main {
 }
 
 #agregarTarea.activo {
+    box-shadow: 1.5rem 0rem 1em 1rem #0d1324;
     max-height: 70rem;
     padding: 1rem;
 }
@@ -145,17 +145,17 @@ main {
     padding: .5rem;
 }
 #agregarTarea input[type="submit"] {
-    background-color: #2563eb;
+    background-color: rgb(34, 180, 34);
     border: none;
     color: white;
     padding: .5rem;
     border-radius: .5rem;
     cursor: pointer;
+    transition: .3s ease;
 }
 
 #agregarTarea input[type="submit"]:hover {
-    background-color: #1a44a0;
-    transition: .3s ease;
+    background-color: rgb(20, 114, 20);
 }
 .seccion-formulario {
     display: flex;
@@ -203,11 +203,13 @@ main {
     background: #888;
 }
 .columna {
-    background-color: #2a2a2a;
+    background-color: #1E293B;
+    backdrop-filter: blur(10px);
     min-width: 18rem;  
     flex: 0 0 18rem;   
     padding: 1rem;
-    box-shadow: 5px 3px 10px rgb(63, 63, 63);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5), 
+                0 2px 4px -2px rgba(0, 0, 0, 0.3);
     transition: transform 0.2s ease, box-shadow 0.2s ease;
     border-radius: 1rem;
     overflow-y: auto;
@@ -215,7 +217,7 @@ main {
 .columna:hover {
     transform: translateY(-5px) scale(1.02);
     z-index: 10;
-    box-shadow: 0 0px 20px rgba(255, 255, 255, 0.3);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.6);
 }
 .columna::-webkit-scrollbar {
     width: 8px;
@@ -234,19 +236,56 @@ main {
     flex-direction: column
 }
 
-.contenedor-tareas article.tarjeta {
+.contenedor-tareas section.tarjeta {
     display: flex;
     flex-direction: column;
     padding: .5rem;
     background-color: rgb(199, 196, 196);
+    backdrop-filter: blur(10px);
     color: black;
     margin: .5rem;
     border-radius: .5rem;
+    position: relative;
 
 }
-.contenedor-tareas article.tarjeta h4 {
+.contenedor-tareas section.tarjeta h4 {
     font-weight: bolder;
 }
+.contenedor-tareas .tarjeta label {
+    width: fit-content;
+    position:absolute;
+    left: 80%;
+    top: 2rem;
+}
+.checkBoxTablero {
+    appearance: none; 
+    -webkit-appearance: none; 
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: 0.4rem;
+    background-color: rgba(15, 23, 42, 0.5); 
+    cursor: pointer;
+    position: absolute;
+    transition: all 0.3s ease; /
+}
+.checkBoxTablero:checked {
+    background-color: #50d404; /* Se pinta todo de celeste */
+}
+img.imgCheckTablero {
+    position: absolute; /* Para que flote sobre el checkbox */
+    pointer-events: none; /* Para que el click pase a través de la imagen al checkbox */
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    
+    /* Centrado manual si el padre es relative */
+}
+
+/* 2. LA MAGIA: Si el INPUT está :checked, afecta a la IMG que tiene al lado (+) */
+.checkBoxTablero:checked + img.imgCheckTablero {
+    opacity: 1;
+}
+
+
 /*segunda seccion, tablero*/
 
 /*Tercera seccion, descripcion*/
@@ -254,16 +293,17 @@ main {
 #descripcion {
     position: relative;
     background-color: #e2e0e0;
-    margin: 0;
+    margin: 0 auto;
     padding: 0;
     border-radius: .5rem;
     color: black;
     opacity: 0;
     max-height: 0;
+    width: 70%;
     overflow-y: scroll;
     overflow: auto;
     transform: translateY(1rem);
-    transition: opacity .3s ease, transform .3s ease, max-height .8s ease, margin .8s ease, padding .8s ease;
+    transition: opacity .3s ease, transform .3s ease, max-height .8s ease, margin .8s ease, padding .8s ease, width 1s ease;
 }
 #descripcion::-webkit-scrollbar {
     width: 8px;
@@ -276,12 +316,12 @@ main {
     background: #2563eb; 
 }
 #descripcion.activo {
-    margin: 3rem .5rem ;
-    padding: 2rem;
+    margin: 3rem auto;
     max-height: 30rem;
     opacity: 1;
     transform: translateY(0);
     pointer-events: auto;
+    width: 70%;
 }
 #descripcion article.info-descripcion {
     padding: 1rem;
@@ -301,24 +341,26 @@ main {
     padding: .5rem;
     border: none;
     border-radius: .7rem;
-    background-color: #dad7d7;
+    color: white;
+    background-color: #2d8db6;
     transition: background-color .4s ease;
 }
 #descripcion button.accion-editar:hover {
-    background-color: white;
+    background-color: #226886;
     transition: background-color .4s ease;
 }
 #descripcion button.accion-eliminar {
     display: flex;
+    color: rgb(233, 231, 231);
     align-items: center;
     padding: .5rem;
     border: none;
     border-radius: .7rem;
-    background-color: #dad7d7;
+    background-color: red;
     transition: background-color .4s ease;
 }
 #descripcion button.accion-eliminar:hover {
-    background-color: white;
+    background-color: rgb(197, 4, 4);
     transition: background-color .4s ease;
 }
 #descripcion label.custom-checkbox{
@@ -384,9 +426,13 @@ img.cerrar:hover {
 #inputsModificar {
     display: none; 
     flex-direction: column;
+    padding: 1rem;
 }
 #inputsModificar.visible {
     display: flex; 
+}
+#inputsModificar label {
+    margin-bottom: .4rem;
 }
 #inputsModificar input {
     margin-bottom: 1rem;
@@ -409,6 +455,7 @@ img.cerrar:hover {
     resize: vertical;
     outline: none; 
     box-sizing: border-box; 
+    margin-bottom: .4rem;
 }
 #inputsModificar input[type="submit"] {
     background-color: #2563eb;
@@ -429,7 +476,7 @@ img.cerrar:hover {
 
 footer {
     display: flex;
-    background-color: #0D0D0D;
+    background-color: #334155;
     width: 100%;
 }
 footer a {
@@ -491,7 +538,7 @@ footer section:nth-child(3) form textarea{
         width: 80%;
     }
  
-.acciones-descripcion {
+    .acciones-descripcion {
         display: flex; /* Quitamos el display: none previo */
         flex-direction: column; /* Apilamos uno arriba del otro */
         align-items: stretch; /* OBLIGA a que todos midan lo mismo de ancho */
@@ -508,7 +555,10 @@ footer section:nth-child(3) form textarea{
         justify-content: center; /* Centramos el texto/iconos adentro */
         box-sizing: border-box;
     }
+    #descripcion.activo {
 
+        width: 95%;
+    }
 
     #agregarTarea.activo {
         width: 95%;

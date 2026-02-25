@@ -63,12 +63,18 @@ function pintarTarea(tarea) {
     let diaSection = document.getElementById(diasSemana[diaIndex])
 
     diaSection.innerHTML += `
-        <article class="tarjeta" id="${tarea.id}">    
+    <section class="tarjeta">
+        <article class="tarjetaI" id="${tarea.id}">    
             <h4> Tarea </h4>        
             <p> ${tarea.tarea} </p>
             <h4> Horario </h4>
             <p> ${tarea.hora} </p>
         </article>
+        <label class="labelTarjetaTablero">
+            <input type="checkbox"data-id="${tarea.id}" ${tarea.estado ? "checked" : ""} class="checkBoxTablero">
+            <img src="img/checkBlanco.png" alt="completado" class="imgCheckTablero"> 
+        </label>
+    </section>
     `
 }
 //PINTAR TAREA NUEVA O MODIFICADA
@@ -126,11 +132,11 @@ function reenderizarTarea(tarjeta) {
         <article class="acciones-descripcion">
             <button class="accion-editar" data-id="${tarjeta.id}">
                 <p>editar</p>    
-                <img src="img/editar.png" alt="editar">
+                <img src="img/editarBlanco.png" alt="editar">
             </button>
             <button class="accion-eliminar" data-id="${tarjeta.id}">
                 <p>eliminar</p>    
-                <img src="img/eliminar.png" alt="elimininar">
+                <img src="img/eliminarBlanco.png" alt="elimininar">
             </button>
             <label class="custom-checkbox" data-id="${tarjeta.id}">
                 <input type="checkbox" ${tarjeta.estado ? "checked" : ""}>
@@ -203,13 +209,15 @@ const seccionDescripcion = document.getElementById("descripcion");
 
 tablero.addEventListener("click", (e) => {
 
-    const tarjeta = e.target.closest(".tarjeta");
+    const tarjeta = e.target.closest(".tarjetaI");
     if (!tarjeta) return;
 
     const tareaId = Number(tarjeta.id);
     const tareaEncontrada = tareas.find(t => t.id === tareaId);
     if (!tareaEncontrada) return;
 
+    // Le "pegamos" el ID al contenedor de la descripción como una etiqueta invisible
+    seccionDescripcion.dataset.tareaActivaId = tareaId;
     //REPASAR FUERTEMENTE ESTO
     //si esta visible prendemos(fade-out)
     if (seccionDescripcion.classList.contains("activo")) {
@@ -242,6 +250,22 @@ tablero.addEventListener("click", (e) => {
             }, 200);
     }
 });
+tablero.addEventListener("change", (e) => {
+    if (!e.target.classList.contains("checkBoxTablero")) return; 
+
+    let idCheckboxTarjeta = Number(e.target.dataset.id);
+    let tareaClickeada = tareas.find(t => t.id === idCheckboxTarjeta);
+    
+    tareaClickeada.estado = !tareaClickeada.estado; 
+    
+    guardarDatos();
+    let idAbierto = Number(seccionDescripcion.dataset.tareaActivaId);
+    
+    if (seccionDescripcion.classList.contains("activo") && idAbierto === idCheckboxTarjeta) {
+        // Re-renderizamos la descripción para que cambie el texto e ícono al instante
+        seccionDescripcion.innerHTML = reenderizarTarea(tareaClickeada);
+    }
+    })
 //---------------------------------------------------------------------------------------------------
 
 
@@ -352,8 +376,12 @@ seccionDescripcion.addEventListener("change", (e) => {
     } else {
         msjEstado[0].textContent = "Estado: Incompleta";
     }
-
-    console.log(tareaEncontrada);
+    const checkboxTablero = document.querySelector(`.checkBoxTablero[data-id="${tareaEncontrada.id}"]`);
+    
+    if (checkboxTablero) {
+        // Le pasamos el mismo estado (true/false) que tiene el de la descripción
+        checkboxTablero.checked = e.target.checked;
+    }
 });
 //---------------------------------------------------------------------------------------------------
 
