@@ -93,6 +93,16 @@ nav ul li {
 }
 /*FIN BARRA DE NAVEGACION*/
 
+main  {
+    background-color: #0F172A;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+main h2 {
+    font-weight: 100;
+}
 
 
 
