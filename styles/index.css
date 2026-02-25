@@ -266,25 +266,34 @@ main {
     background-color: rgba(15, 23, 42, 0.5); 
     cursor: pointer;
     position: absolute;
-    transition: all 0.3s ease; /
+    transition: all 0.3s ease; 
 }
 .checkBoxTablero:checked {
-    background-color: #50d404; /* Se pinta todo de celeste */
+    background-color: #50d404; 
 }
 img.imgCheckTablero {
-    position: absolute; /* Para que flote sobre el checkbox */
-    pointer-events: none; /* Para que el click pase a través de la imagen al checkbox */
+    position: absolute; 
+    pointer-events: none; 
     opacity: 0;
     transition: opacity 0.3s ease;
-    
-    /* Centrado manual si el padre es relative */
-}
+    }
 
-/* 2. LA MAGIA: Si el INPUT está :checked, afecta a la IMG que tiene al lado (+) */
 .checkBoxTablero:checked + img.imgCheckTablero {
     opacity: 1;
 }
-
+/*Seleccioname la sección tarjeta siempre y cuando dentro de ella exista un .checkBoxTablero en estado checked*/
+.tarjeta:has(.checkBoxTablero:checked) .tarjetaI p {
+    text-decoration: line-through;
+    opacity: 0.5;
+    transition: all 0.3s ease;
+}
+.tarjeta:has(.checkBoxTablero:checked) .tarjetaI h4 {
+    text-decoration: line-through;
+    opacity: 0.5;
+}
+.tarjeta:has(.checkBoxTablero:checked) {
+    background-color: rgba(245, 244, 244, 0.712); 
+}
 
 /*segunda seccion, tablero*/
 
