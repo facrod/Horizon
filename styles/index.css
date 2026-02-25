@@ -2,7 +2,7 @@
 
 @font-face {
     font-family: 'miFuente';
-    src: url('./fonts/SNPro-VariableFont_wght.ttf') format('truetype');
+    src: url('../fonts/SNPro-VariableFont_wght.ttf') format('truetype');
     
 }
 * {

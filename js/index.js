@@ -1,4 +1,4 @@
-//botones header
+//----------------------------------FIN BOTONES HEADER--------------------------------------------------
 
 let botonMostrarDias = document.getElementById('mostrarDias');
 const listaDias = document.getElementById('listaDias')
@@ -24,30 +24,42 @@ document.addEventListener("click", (e) => {
         agregarTarea.classList.remove("activo");
     }
 });
-//fin botones header
+//-----------------------------------------------------------------------------------------------------
 
-// Logica para agregar una tarea nueva al local storage
+//TRAIGO DATOS DEL LOCAL
+
+let tareas = JSON.parse(localStorage.getItem("tareas")) || [];
+
+// Capturo datos que me llegan del formulario para agregar una tarea nueva
 let nombreTarea = document.getElementById("nombreTarea");
 let diaTarea = document.getElementById("diaTarea");
 let horaTarea = document.getElementById("horaTarea");
 let descripcionTarea = document.getElementById("descripcionTarea");
 let btnAgregarTarea = document.getElementById("btnAgregarTarea");
 const formAgregar = document.getElementById("agregarTarea");
-
-let tareas = JSON.parse(localStorage.getItem("tareas")) || [];
-const tablero = document.getElementById("tablero");
-const seccionDescripcion = document.getElementById("descripcion");
-
 const diasSemana = ["domingo", "lunes", "martes", "miercoles", "jueves", "viernes", "sabado"]
 
-//LOGICA PARA PINTAR TAREAS EN LAS CARDS, YA SEA AL INICIAR LA PAGINA O AL CARGAR
 
+//-----------------------------------------FUNCIONES-------------------------------------------------
+
+
+//RENDERIZAR TAREAS 
+function renderizarTareasInicio() {
+    tareas.sort((a, b) => a.hora.localeCompare(b.hora)); 
+    tareas.forEach(tarea => {
+        pintarTarea(tarea)        
+    });
+}
+//GUARDAR TAREAS EN EL LOCAL 
+
+function guardarDatos() {
+    localStorage.setItem("tareas", JSON.stringify(tareas));
+
+}
+//FUNCION PARA PINTAR UNA TAREA
 function pintarTarea(tarea) {
-
     let dia = new Date(tarea.dia)
     let diaIndex = dia.getUTCDay()
-
-
     let diaSection = document.getElementById(diasSemana[diaIndex])
 
     diaSection.innerHTML += `
@@ -59,16 +71,26 @@ function pintarTarea(tarea) {
         </article>
     `
 }
-function refrescarTablero() {
-    // 1. Limpiamos todas las secciones de los días primero
-    diasSemana.forEach(dia => {
-        const section = document.getElementById(dia);
-        if (section) section.innerHTML = ``; 
-    });
+//PINTAR TAREA NUEVA O MODIFICADA
+function refrescarDia(diaString) {
 
-    // 2. Pintamos todas las tareas del array (que ya está ordenado)
-    tareas.forEach(tarea => pintarTarea(tarea));
+    let dia = new Date(diaString);
+    let diaIndex = dia.getUTCDay();
+    let idSeccion = diasSemana[diaIndex];
+
+    const section = document.getElementById(idSeccion);
+    if (!section) return;
+
+    section.innerHTML = "";
+
+    tareas.filter(t => {
+            let d = new Date(t.dia);
+            return d.getUTCDay() === diaIndex;
+        })
+        .forEach(t => pintarTarea(t));
 }
+
+//REFRESCAR DESCRIPCION Y REENDERIZAR
 function reenderizarTarea(tarjeta) {
     let nuevoContenido = `
         <img src="img/cerrar.png" class="cerrar" id="close" alt="cerrar">
@@ -121,9 +143,13 @@ function reenderizarTarea(tarjeta) {
         `;
         return nuevoContenido;
 }
-let inputs = [nombreTarea, diaTarea, horaTarea, descripcionTarea];
+//-----------------------------------------------------------------------------------------------------
 
 
+renderizarTareasInicio()
+
+//--------------------------LOGICA PARA AGREGAR UNA TAREA NUEVA A LA BASE DE DATOS----------------------
+let inputs = [nombreTarea, diaTarea, horaTarea];
 formAgregar.addEventListener("submit", (e) => {
     e.preventDefault();
 
@@ -151,27 +177,29 @@ formAgregar.addEventListener("submit", (e) => {
         estado: false,
         id: Date.now(),
     };
+    const existeDuplicado = tareas.some(t => t.dia === tarea.dia && t.hora === tarea.hora);
 
+    if (existeDuplicado) {
+        alert("Ya tienes una tarea programada para ese mismo día y hora.");
+        return; 
+    }
+
+    console.log(taresaSinRepetir)
     tareas.push(tarea);
     tareas.sort((a, b) => a.hora.localeCompare(b.hora)); 
-    localStorage.setItem("tareas", JSON.stringify(tareas));
+    guardarDatos()
+    refrescarDia(tarea.dia); 
 
-    refrescarTablero(); 
     formAgregar.reset(); 
     agregarTarea.classList.remove("activo");
+    
+
 });
+//-------------------------------------------------------------------------------------------------------
 
-
-//fin logica
-
-//cargado de tareas en el tablero
-
-
-tareas.forEach(tarea => {
-
-    pintarTarea(tarea)
-});
-
+//------------------------------CARGADO DE TAREAS EN EL TABLERO------------------------------------------
+const tablero = document.getElementById("tablero");
+const seccionDescripcion = document.getElementById("descripcion");
 
 tablero.addEventListener("click", (e) => {
 
@@ -214,9 +242,13 @@ tablero.addEventListener("click", (e) => {
             }, 200);
     }
 });
+//---------------------------------------------------------------------------------------------------
 
 
+//-----------------------Acciones de la seccion descripcion------------------------------------------
 seccionDescripcion.addEventListener("click", (e) => {
+
+            // CERRAR DESCRIPCION
     if (e.target.closest(".cerrar")) {
         seccionDescripcion.classList.remove("activo");
         return;
@@ -239,7 +271,8 @@ seccionDescripcion.addEventListener("click", (e) => {
             document.getElementById("horaModificada").value = tar.hora;
             
             // Guardamos el ID en el form para saber cuál TAREA estamos editando
-            inputsModificar.dataset.id = idTarea; 
+            inputsModificar.dataset.id = idTarea;
+
         } else {
             inputsModificar.classList.remove("visible");
             inputsDescripcion.style.display = "block";
@@ -251,8 +284,7 @@ seccionDescripcion.addEventListener("click", (e) => {
     if (e.target.closest(".accion-eliminar")) {
         let idTarea = e.target.closest(".accion-eliminar").dataset.id;
         tareas = tareas.filter (t => t.id !== Number(idTarea))        
-        localStorage.setItem("tareas", JSON.stringify(tareas));
-
+        guardarDatos()
         const tarjeta = document.getElementById(idTarea);
         if (tarjeta) {
             tarjeta.remove();
@@ -260,26 +292,50 @@ seccionDescripcion.addEventListener("click", (e) => {
         seccionDescripcion.classList.remove("activo");
     }
 });
+
+
+        // EDITAR (FUNCIONALIDAD)
 seccionDescripcion.addEventListener("submit", (e) => {
-    if (e.target.id === "inputsModificar") {
-        e.preventDefault(); 
+if (e.target.id === "inputsModificar") {
+    e.preventDefault(); 
 
-        let idTarea = e.target.dataset.id;
-        let tar = tareas.find(t => t.id == Number(idTarea));
+    let idTarea = Number(e.target.dataset.id);
+    let tar = tareas.find(t => t.id === idTarea);
 
-        tar.tarea = document.getElementById("tareaModificada").value;
-        tar.descripcion = document.getElementById("descripcionInput").value;
-        tar.dia = document.getElementById("diaModificado").value;
-        tar.hora = document.getElementById("horaModificada").value;
+    let nuevaFecha = document.getElementById("diaModificado").value;
+    let nuevaHora = document.getElementById("horaModificada").value;
 
-        tareas.sort((a, b) => a.hora.localeCompare(b.hora));
-        localStorage.setItem("tareas", JSON.stringify(tareas));
-            
-        refrescarTablero(); 
+    const hayConflicto = tareas.some(t => 
+        t.dia === nuevaFecha && 
+        t.hora === nuevaHora && 
+        t.id !== idTarea // Que no sea la misma que estoy editando
+    );
 
-        seccionDescripcion.innerHTML = reenderizarTarea(tar);
+    if (hayConflicto) {
+        alert("Ese horario ya está ocupado por otra tarea.");
+        return; 
     }
+
+    let fechaVieja = tar.dia;
+    
+    tar.tarea = document.getElementById("tareaModificada").value;
+    tar.descripcion = document.getElementById("descripcionInput").value;
+    tar.dia = nuevaFecha;
+    tar.hora = nuevaHora;
+
+    tareas.sort((a, b) => a.hora.localeCompare(b.hora));
+    guardarDatos();
+    
+    refrescarDia(fechaVieja); 
+
+    if (fechaVieja !== nuevaFecha) {
+        refrescarDia(nuevaFecha); 
+    }
+    seccionDescripcion.innerHTML = reenderizarTarea(tar);
+}
 });
+
+        // CHECKBOX 
 seccionDescripcion.addEventListener("change", (e) => {
     if (!e.target.matches('input[type="checkbox"]')) return;
 
@@ -289,7 +345,7 @@ seccionDescripcion.addEventListener("change", (e) => {
 
     tareaEncontrada.estado = e.target.checked;
 
-    localStorage.setItem("tareas", JSON.stringify(tareas));
+    guardarDatos()
     let msjEstado = document.getElementsByClassName("estadoMsj")
     if (e.target.checked) {
         msjEstado[0].textContent = "Estado: Completa";
@@ -299,3 +355,6 @@ seccionDescripcion.addEventListener("change", (e) => {
 
     console.log(tareaEncontrada);
 });
+//---------------------------------------------------------------------------------------------------
+
+

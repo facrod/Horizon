@@ -1,0 +1,146 @@
+/*NORMALIZANDO Y AGREGANDO FUENTES */
+
+@font-face {
+    font-family: 'miFuente';
+    src: url('../fonts/SNPro-VariableFont_wght.ttf') format('truetype');
+    
+}
+* {
+    margin: 0;
+    padding: 0;
+}
+body {
+    min-height: 100vh;
+    color: white;
+    font-family: 'miFuente', sans-serif;
+    font-weight: 100;
+}
+
+/*NORMALIZANDO */
+
+/*MEJORANDO LOS TITULOS */
+h1, h2, h3, h4 {
+    font-weight: 300;
+}
+/*MEJORANDO LOS TITULOS */
+
+/*BARRA DE NAVEGACION*/
+header {
+    position: sticky;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+
+    display: flex;
+    padding: 1rem;
+    flex-direction: column;
+    align-items: center;
+    background-color: #0D0D0D;
+}
+nav {
+    display: flex;
+    justify-content: center;
+}
+nav a {
+    color: white;
+    text-decoration: none;
+}
+#mostrarDias {
+    border: none;
+    background-color: transparent;
+    color: white;
+    cursor:pointer;
+}
+
+nav > ul {
+    display: flex;
+    gap: 1rem;
+    list-style: none;
+}
+
+/*animacion barra de dias */
+nav ul li {
+    position: relative;
+}
+#listaDias {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    
+    background: #2a2a2a;
+    list-style: none;
+    padding: 0.5rem 0;
+    border-radius: 8px;
+    transform: translateY(10px);
+
+    opacity: 0;
+    pointer-events: none;
+
+    transition: transform .4s ease, opacity .4s ease;
+}
+
+#listaDias.abierto {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
+}
+#listaDias li {
+    padding: 0.5rem 1rem;
+}
+
+#listaDias li:hover {
+    background-color: #3a3a3a;
+}
+/*FIN BARRA DE NAVEGACION*/
+
+
+
+
+/*FOTER*/
+footer {
+    display: flex;
+    background-color: #0D0D0D;
+    width: 100%;
+}
+footer a {
+    text-decoration: none;
+    color: white;
+    transition: font-weight .3s ease;
+}
+footer a:hover{
+    font-weight: 500;
+}
+
+footer section:nth-child(1) {
+    padding: 1rem;
+    width: 15%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    align-self: center;
+
+}
+footer section:nth-child(2) {
+    padding: 1rem;
+    width: 70%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    align-self: center;
+
+}
+footer section:nth-child(3) {
+    padding: 1rem;
+    width: 15%;
+}
+footer section:nth-child(3) form {
+    display: flex;
+    flex-direction: column;
+}
+footer section:nth-child(3) form label{
+    margin: 1rem 0 .3rem 0;
+}
+footer section:nth-child(3) form textarea{
+    outline: none;
+    resize: vertical;;
+}

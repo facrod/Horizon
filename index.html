@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="styles/index.css">
     <title>Horizon</title>
 </head>
 <body>
@@ -11,17 +11,19 @@
         <h1>Horizon</h1>
         <nav>
              <ul>
-                <li><a href="">Inicio</a></li>
                 <li>
-                    <button id="mostrarDias">Dias</button>
+                    <a href="">Inicio</a>
+                </li>
+                <li>
+                    <a href="pages/calendario.html">Calendario</a>
+                </li>
+                <li>
+                    <button id="mostrarDias">Semanas</button>
                     <ul id="listaDias" >
-                        <li><a href="">Lunes</a></li>
-                        <li><a href="">Martes</a></li>
-                        <li><a href="">Miercoles</a></li>
-                        <li><a href="">Jueves</a></li>
-                        <li><a href="">Viernes</a></li>
-                        <li><a href="">Sabado</a></li>
-                        <li><a href="">Domingo</a></li>
+                        <li><a href="">Primera semana</a></li>
+                        <li><a href="">Segunda semana</a></li>
+                        <li><a href="">Tercera semana</a></li>
+                        <li><a href="">Cuarta semana</a></li>
                     </ul>
                 </li>
             </ul>
@@ -42,7 +44,7 @@
                 <label>Horario</label>
                 <input type="time" id="horaTarea">
 
-                <label>Agrega una descripción</label>
+                <label>Agrega una descripción (opcional)</label>
                 <textarea id="descripcionTarea" cols="30" rows="10"></textarea>
 
                 <input type="submit" value="subir" id="btnAgregarTarea">
@@ -92,11 +94,11 @@
     <footer>
         <section>
             <a href="">Inicio</a>
-            <a href="">Contactos</a>
+            <a href="pages/calendario.html">calendario</a>
         </section>
         <section>
             <h4>¿Quienes somos?</h4>
-            <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Ducimus possimus ipsam itaque beatae aut eum commodi, inventore minus atque natus suscipit doloribus sequi, eligendi molestias consectetur laborum! Sapiente, a similique.</p>
+            <p>Tu día, bajo control. Horizon nació para quienes buscan equilibrio entre sus responsabilidades y su tiempo libre. Diseñamos herramientas simples para que dejes de preocuparte por lo que sigue y empieces a disfrutar de lo que estás haciendo.</p>
         </section>
         <section>
             <h4>Deja un comentario!</h4>
@@ -108,6 +110,6 @@
             </form>
         </section>
     </footer>
-    <script src="index.js"></script>
+    <script src="js/index.js"></script>
 </body>
 </html>
