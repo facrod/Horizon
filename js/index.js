@@ -190,7 +190,6 @@ formAgregar.addEventListener("submit", (e) => {
         return; 
     }
 
-    console.log(taresaSinRepetir)
     tareas.push(tarea);
     tareas.sort((a, b) => a.hora.localeCompare(b.hora)); 
     guardarDatos()
