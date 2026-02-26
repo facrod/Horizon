@@ -134,10 +134,15 @@ function reenderizarTarea(tarjeta) {
                 <p>editar</p>    
                 <img src="img/editarBlanco.png" alt="editar">
             </button>
-            <button class="accion-eliminar" data-id="${tarjeta.id}">
+            <button class="accion-eliminar">
                 <p>eliminar</p>    
                 <img src="img/eliminarBlanco.png" alt="elimininar">
             </button>
+            <section id="mensajeEliminar">
+                    <button class="cerrarModalBorrar" > <img src="img/cerrar.png" alt="cerrar"></button>
+                    <p>Estas seguro que quieres eliminar la tarea?</P>
+                    <button class="eliminarBtn" id="btnEliminar" data-id="${tarjeta.id}">eliminar</button>
+            </section>
             <label class="custom-checkbox" data-id="${tarjeta.id}">
                 <input type="checkbox" ${tarjeta.estado ? "checked" : ""}>
                 <span class="checkmark"> 
@@ -284,27 +289,45 @@ seccionDescripcion.addEventListener("click", (e) => {
         let inputsDescripcion = document.getElementById("seccionDescripcionInfo");
         let idTarea = e.target.closest(".accion-editar").dataset.id;
         let tar = tareas.find(t => t.id == Number(idTarea));
+
         if (!inputsModificar.classList.contains("visible")) {
-            inputsModificar.classList.add("visible");
-            inputsDescripcion.style.display = "none";
+            inputsModificar.classList.add("visible")
+            inputsDescripcion.classList.add("oculto")
 
             document.getElementById("tareaModificada").value = tar.tarea;
             document.getElementById("descripcionInput").value = tar.descripcion;
             document.getElementById("diaModificado").value = tar.dia;
             document.getElementById("horaModificada").value = tar.hora;
-            
             // Guardamos el ID en el form para saber cuál TAREA estamos editando
             inputsModificar.dataset.id = idTarea;
-
         } else {
             inputsModificar.classList.remove("visible");
-            inputsDescripcion.style.display = "block";
-        }   
+            inputsDescripcion.classList.remove("oculto")
+        }
     }
 
             //ELIMINAR
 
     if (e.target.closest(".accion-eliminar")) {
+        let mensajeEliminar = document.getElementById("mensajeEliminar")
+        mensajeEliminar.classList.add("msjVisible")
+    }
+    if (e.target.closest(".cerrarModalBorrar")) {
+        mensajeEliminar.classList.remove("msjVisible")
+        return;
+    }
+    if (e.target.closest("#btnEliminar")) {
+        let tareaCapturadaId = Number(e.target.closest("#btnEliminar").dataset.id)
+        tareas = tareas.filter (t => t.id !== tareaCapturadaId)  
+        guardarDatos()
+        mensajeEliminar.classList.remove("msjVisible")
+        const articleTarea = document.getElementById(tareaCapturadaId);
+        if (articleTarea) {
+            articleTarea.parentElement.remove();
+        }
+        seccionDescripcion.classList.remove("activo");
+    }
+        /*
         let idTarea = e.target.closest(".accion-eliminar").dataset.id;
         tareas = tareas.filter (t => t.id !== Number(idTarea))        
         guardarDatos()
@@ -313,8 +336,10 @@ seccionDescripcion.addEventListener("click", (e) => {
             articleTarea.parentElement.remove();
         }
         seccionDescripcion.classList.remove("activo");
-    }
+        */
+    
 });
+
 
 
         // EDITAR (FUNCIONALIDAD)
@@ -354,7 +379,15 @@ if (e.target.id === "inputsModificar") {
     if (fechaVieja !== nuevaFecha) {
         refrescarDia(nuevaFecha); 
     }
-    seccionDescripcion.innerHTML = reenderizarTarea(tar);
+    
+    setTimeout(() => {
+            seccionDescripcion.style.opacity = "0";
+            
+            setTimeout(() => {
+                seccionDescripcion.innerHTML = reenderizarTarea(tar);
+                seccionDescripcion.style.opacity = "1";
+            }, 200);
+        }, 300);
 }
 });
 

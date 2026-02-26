@@ -433,13 +433,38 @@ img.cerrar:hover {
 
 
 #inputsModificar {
-    display: none; 
-    flex-direction: column;
-    padding: 1rem;
-}
-#inputsModificar.visible {
     display: flex; 
+    flex-direction: column;
+    
+    opacity: 0;
+    max-height: 0;
+    overflow: hidden;
+    padding: 0; 
+    transition: opacity .5s ease, max-height .5s ease, padding .5s ease;
+    pointer-events: none; 
 }
+
+#inputsModificar.visible {
+    opacity: 1;
+    max-height: 30rem; 
+    pointer-events: auto;
+    padding: 1rem; 
+}
+
+#seccionDescripcionInfo {
+    opacity: 1;
+    max-height: 30rem; /* Valor fijo también aquí */
+    overflow: hidden;
+    transition: all .4s ease;
+}
+
+#seccionDescripcionInfo.oculto {
+    max-height: 0;
+    opacity: 0;
+    padding: 0;
+}
+
+
 #inputsModificar label {
     margin-bottom: .4rem;
 }
@@ -479,6 +504,56 @@ img.cerrar:hover {
     font-weight: 500;
 }
 
+#mensajeEliminar {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); 
+    width: 280px;
+    background-color: white;
+    padding: 2rem;
+    border-radius: 1rem;
+    box-shadow: 1rem 1rem 1rem rgb(167, 166, 166);
+    display: flex;
+    flex-direction: column;
+    z-index: 100;
+    opacity: 0;
+    pointer-events: none; 
+    transition: opacity 0.4s ease; 
+}
+
+#mensajeEliminar.msjVisible {
+    opacity: 1;
+    pointer-events: auto; 
+}
+
+#mensajeEliminar button:nth-child(1) {
+    position: absolute;
+    border: none;
+    background-color: transparent;
+    left: 90%;
+    top: 10%;
+    cursor: pointer;
+}
+#mensajeEliminar button:nth-child(3) {
+    margin-top:1rem;
+    width: fit-content;
+    align-self: center;
+    cursor: pointer;
+}
+.eliminarBtn {
+    background-color: red;
+    border: none;
+    padding: .5rem;
+    border-radius: 1rem;
+    color: white;
+    font-weight: 600;
+    transition: background-color .3s ease;
+}
+.eliminarBtn:hover {
+    background-color: rgb(141, 1, 1);
+
+}
 /*Tercera seccion, descripcion*/
 
 /*footer*/
