@@ -27,4 +27,4 @@ Horizon está diseñado para evolucionar. El plan de desarrollo incluye:
 - [ ] **User Auth:** Sistema de cuentas de usuario.
 
 ---
-Creado por [Tu Nombre] - Proceso documentado en LinkedIn.
+Creado por Facundo Rodriguez - Proceso documentado en LinkedIn.
