@@ -27,4 +27,8 @@ Horizon está diseñado para evolucionar. El plan de desarrollo incluye:
 - [ ] **User Auth:** Sistema de cuentas de usuario.
 
 ---
+<<<<<<< HEAD
 Creado por Facundo Rodriguez - Proceso documentado en LinkedIn.
+=======
+Creado por Facundo Rodríguez - Proceso documentado en LinkedIn.
+>>>>>>> 9cc2e5b (Se agrego hora de finalización y lógica para impedir el solapamientos de tareas, además de filtrar el calendario por semanas para no anotar una tarea para la próxima semana y que se muestre)

@@ -1,4 +1,4 @@
-//----------------------------------FIN BOTONES HEADER--------------------------------------------------
+//----------------------------------BOTONES HEADER--------------------------------------------------
 
 let botonMostrarDias = document.getElementById('mostrarDias');
 const listaDias = document.getElementById('listaDias')
@@ -34,6 +34,7 @@ let tareas = JSON.parse(localStorage.getItem("tareas")) || [];
 let nombreTarea = document.getElementById("nombreTarea");
 let diaTarea = document.getElementById("diaTarea");
 let horaTarea = document.getElementById("horaTarea");
+let horaTareaFinalizacion = document.getElementById("horaTareaFinalizacion")
 let descripcionTarea = document.getElementById("descripcionTarea");
 let btnAgregarTarea = document.getElementById("btnAgregarTarea");
 const formAgregar = document.getElementById("agregarTarea");
@@ -41,13 +42,62 @@ const diasSemana = ["domingo", "lunes", "martes", "miercoles", "jueves", "vierne
 
 
 //-----------------------------------------FUNCIONES-------------------------------------------------
+function obtenerLimitesSemanales() {
+    let hoy = new Date();
+    let diaActual = hoy.getUTCDay();
+    let diferenciaAlLunes = (diaActual === 0) ? 6 : diaActual - 1;
 
+    let lunes = new Date(hoy);
+    lunes.setDate(hoy.getDate() - diferenciaAlLunes);
+
+    let domingo = new Date(lunes);
+    domingo.setDate(lunes.getDate() + 6);
+
+    function formatear(fecha) {
+        let d = fecha.getDate().toString().padStart(2, '0');
+        let m = (fecha.getMonth() + 1).toString().padStart(2, '0');
+        let y = fecha.getFullYear();
+        return y + "-" + m + "-" + d;
+    }
+
+    return { 
+        min: formatear(lunes), 
+        max: formatear(domingo) 
+    };
+}
+
+function establecerLimitesCalendario() {
+    const limites = obtenerLimitesSemanales();
+    diaTarea.min = limites.min;
+    diaTarea.max = limites.max;
+}
 
 //RENDERIZAR TAREAS 
 function renderizarTareasInicio() {
-    tareas.sort((a, b) => a.hora.localeCompare(b.hora)); 
-    tareas.forEach(tarea => {
-        pintarTarea(tarea)        
+    // Ordenamos 
+    tareas.sort((a, b) => {
+        return a.hora.localeCompare(b.hora);
+    });
+
+    // Obtenemos los límites de nuevo para filtrar
+    let hoy = new Date();
+    let diaActual = hoy.getUTCDay();
+    let diferenciaAlLunes = (diaActual === 0) ? 6 : diaActual - 1;
+    
+    let lunes = new Date(hoy);
+    lunes.setHours(0,0,0,0);
+    lunes.setDate(hoy.getDate() - diferenciaAlLunes);
+
+    let domingo = new Date(lunes);
+    domingo.setHours(23,59,59,999);
+    domingo.setDate(lunes.getDate() + 6);
+
+    // 3. Filtramos y pintamos
+    tareas.filter( t => {
+        let fechaTarea = new Date(t.dia.replace(/-/g, '\/'));
+        return fechaTarea >= lunes && fechaTarea <= domingo;
+    }).forEach(function(t) {
+        pintarTarea(t);        
     });
 }
 //GUARDAR TAREAS EN EL LOCAL 
@@ -95,7 +145,6 @@ function refrescarDia(diaString) {
         })
         .forEach(t => pintarTarea(t));
 }
-
 //REFRESCAR DESCRIPCION Y REENDERIZAR
 function reenderizarTarea(tarjeta) {
     let nuevoContenido = `
@@ -108,7 +157,8 @@ function reenderizarTarea(tarjeta) {
             </article>
             <article class="dia-hora-descripcion">
                 <p>${tarjeta.dia}</p>
-                <p>${tarjeta.hora}</p>
+                <p>Inicio: ${tarjeta.hora}</p>
+                <p>Fin: ${tarjeta.horaFinalizacion}
                 <p class="estadoMsj">Estado: ${tarjeta.estado ? "Completa" : "incompleta"}</p>
             </article>
         </section>
@@ -126,6 +176,10 @@ function reenderizarTarea(tarjeta) {
             <label for="horaModificada">Hora</label>
             <input type="time" id="horaModificada" class="modificarT">
 
+            <label for="horaTareaFinalizacionModificada">Hora de finalización</label>
+            <input type="time" id="horaTareaFinalizacionModificada">
+            <span id="errorHoraModf">La hora de fin debe ser posterior a la de inicio</span>
+            
             <input type="submit" id="btnModificar" class="modificarT" value="modificar">
         </form>
 
@@ -154,17 +208,82 @@ function reenderizarTarea(tarjeta) {
         `;
         return nuevoContenido;
 }
+// Función para convertir HH:mm a minutos (Número)
+function horaAMinutos(horaStr) {
+    if (!horaStr) return 0;
+    const partes = horaStr.split(':'); // Ejemplo: ["09", "30"]
+    const h = Number(partes[0]);        // 9
+    const m = Number(partes[1]);        // 30
+    return (h * 60) + m;                // 540 + 30 = 570
+}
+
+// Función para detectar solapamientos
+function obtenerTareaSolapada(dia, inicio, fin, idActual = null) {
+    //Convertimos las horas de la tarea que queremos agregar/editar a minutos
+    const nuevaInicio = horaAMinutos(inicio);
+    const nuevaFin = horaAMinutos(fin);
+
+    // Buscamos dentro del array tareas
+    return tareas.find(function(t) {
+        // Si no es el mismo día, no hay choque posible, pasamos a la siguiente
+        if (t.dia !== dia) {
+            return false;
+        }
+
+        // Si el ID coincide con idActua', es la misma tarea que estamos editando.
+        // La ignoramos para que no choque contra sí misma.
+        if (idActual && t.id === idActual) {
+            return false;
+        }
+
+        //Convertimos las horas de la tarea que ya estaba guardada
+        const exInicio = horaAMinutos(t.hora);
+        const exFin = horaAMinutos(t.horaFinalizacion);
+
+
+        // Si la nueva empieza antes de que termine la vieja y la nueva termina después de que empiece la vieja se cruzan 
+        return nuevaInicio < exFin && nuevaFin > exInicio;
+    });
+}
 //-----------------------------------------------------------------------------------------------------
 
-
+establecerLimitesCalendario();
 renderizarTareasInicio()
 
 //--------------------------LOGICA PARA AGREGAR UNA TAREA NUEVA A LA BASE DE DATOS----------------------
 let inputs = [nombreTarea, diaTarea, horaTarea];
+/* */
+formAgregar.addEventListener("input", (e) => { 
+    
+    if (e.target.closest("#horaTarea")) {
+        horaTareaFinalizacion.value = horaTarea.value;
+    }
+
+    const errorSpan = document.getElementById("errorHora");
+
+    if (horaTareaFinalizacion.value && horaTarea.value) {
+        if (horaTareaFinalizacion.value <= horaTarea.value) {
+            errorSpan.style.display = "block";
+        } else {
+            errorSpan.style.display = "none";
+        }
+    }
+});
+
 formAgregar.addEventListener("submit", (e) => {
     e.preventDefault();
 
     let formularioValido = true;
+    const msjErrorFormulario = document.getElementById("errorFormulario")
+
+    const errorSpan = document.getElementById("errorHora");
+    if (errorSpan.style.display === "block") {
+        errorSpan.scrollIntoView({ 
+            behavior: 'smooth', 
+            block: 'center'     
+        })
+        return
+    }
 
     inputs.forEach(input => {
         if (!input.value.trim()) {
@@ -172,11 +291,11 @@ formAgregar.addEventListener("submit", (e) => {
             formularioValido = false;
         } else {
             input.style.border = "none";
+            msjErrorFormulario.style.display = "none"
         }
     });
-
     if (!formularioValido) {
-        alert("Faltan rellenar campos");
+        msjErrorFormulario.style.display = "block"
         return;
     }
 
@@ -184,6 +303,7 @@ formAgregar.addEventListener("submit", (e) => {
         tarea: nombreTarea.value,
         dia: diaTarea.value,
         hora: horaTarea.value,
+        horaFinalizacion: horaTareaFinalizacion.value,
         descripcion: descripcionTarea.value,
         estado: false,
         id: Date.now(),
@@ -194,7 +314,11 @@ formAgregar.addEventListener("submit", (e) => {
         alert("Ya tienes una tarea programada para ese mismo día y hora.");
         return; 
     }
-
+    const conflicto = obtenerTareaSolapada(tarea.dia, tarea.hora, tarea.horaFinalizacion);
+    if (conflicto) {
+        alert(`¡Conflicto! Este horario ya está ocupado por: "${conflicto.tarea}" (${conflicto.hora} - ${conflicto.horaFinalizacion})`);
+        return;
+    }
     tareas.push(tarea);
     tareas.sort((a, b) => a.hora.localeCompare(b.hora)); 
     guardarDatos()
@@ -298,13 +422,23 @@ seccionDescripcion.addEventListener("click", (e) => {
             document.getElementById("descripcionInput").value = tar.descripcion;
             document.getElementById("diaModificado").value = tar.dia;
             document.getElementById("horaModificada").value = tar.hora;
+            document.getElementById("horaTareaFinalizacionModificada").value = tar.horaFinalizacion;
             // Guardamos el ID en el form para saber cuál TAREA estamos editando
             inputsModificar.dataset.id = idTarea;
         } else {
             inputsModificar.classList.remove("visible");
             inputsDescripcion.classList.remove("oculto")
         }
+        //logica calendario filtrado por semana
+        let inputModificarDia = document.getElementById("diaModificado");
+        if (inputModificarDia) {
+            const limites = obtenerLimitesSemanales(); 
+            inputModificarDia.min = limites.min;
+            inputModificarDia.max = limites.max;
+        }
     }
+
+    
 
             //ELIMINAR
 
@@ -341,54 +475,83 @@ seccionDescripcion.addEventListener("click", (e) => {
 });
 
 
+    //LOGICA DE HORARIOS EN EDITAR
+seccionDescripcion.addEventListener("change", (e)=>{
+    let inputModificarDia = document.getElementById("diaModificado");
+    if(inputModificarDia) {
+        inputModificarDia.min = formatear(lunes);
+        inputModificarDia.max = formatear(domingo);
+    }
+    if (e.target.closest("#horaModificada")) {
+        let horaFinalizacionModificada = document.getElementById("horaTareaFinalizacionModificada")
+        horaFinalizacionModificada.value = e.target.closest("#horaModificada").value
+    }
+    if (e.target.closest("#horaTareaFinalizacionModificada")) {
+        let msjError = document.getElementById("errorHoraModf");
+        let horaFinalizacionMod = e.target.closest("#horaTareaFinalizacionModificada")
+        let horaInicioMod = document.getElementById("horaModificada")
+        if (horaInicioMod.value >= horaFinalizacionMod.value) {
+            msjError.style.display = "block"
+            console.log("error")
+        } else {
+            msjError.style.display = "none";
+        }
+    }
+})
 
         // EDITAR (FUNCIONALIDAD)
+
 seccionDescripcion.addEventListener("submit", (e) => {
-if (e.target.id === "inputsModificar") {
-    e.preventDefault(); 
+    if (e.target.id === "inputsModificar") {
+        e.preventDefault(); 
+        let idTarea = Number(e.target.dataset.id);
+        let tar = tareas.find(t => t.id === idTarea);
 
-    let idTarea = Number(e.target.dataset.id);
-    let tar = tareas.find(t => t.id === idTarea);
+        let nuevaFecha = document.getElementById("diaModificado").value;
+        let nuevaHoraInicio = document.getElementById("horaModificada").value;
+        let nuevaHoraFinalizacion = document.getElementById("horaTareaFinalizacionModificada").value
 
-    let nuevaFecha = document.getElementById("diaModificado").value;
-    let nuevaHora = document.getElementById("horaModificada").value;
+        const conflictoEdicion = obtenerTareaSolapada(nuevaFecha, nuevaHoraInicio, nuevaHoraFinalizacion, idTarea);
 
-    const hayConflicto = tareas.some(t => 
-        t.dia === nuevaFecha && 
-        t.hora === nuevaHora && 
-        t.id !== idTarea // Que no sea la misma que estoy editando
-    );
+        if (conflictoEdicion) {
+            alert(`No puedes mover la tarea aquí. Choca con: "${conflictoEdicion.tarea}"`);
+            return;
+        }
 
-    if (hayConflicto) {
-        alert("Ese horario ya está ocupado por otra tarea.");
-        return; 
+        let fechaVieja = tar.dia;
+        
+        let msjError = document.getElementById("errorHoraModf");
+        if (msjError.style.display == "block") {
+            msjError.scrollIntoView({
+                behavior: 'smooth', 
+                block: 'center'    
+            })
+            return;
+        }
+        tar.tarea = document.getElementById("tareaModificada").value;
+        tar.descripcion = document.getElementById("descripcionInput").value;
+        tar.dia = nuevaFecha;
+        tar.hora = nuevaHoraInicio;
+        tar.horaFinalizacion = nuevaHoraFinalizacion
+
+        tareas.sort((a, b) => a.hora.localeCompare(b.hora));
+        guardarDatos();
+        
+        refrescarDia(fechaVieja); 
+
+        if (fechaVieja !== nuevaFecha) {
+            refrescarDia(nuevaFecha); 
+        }
+        
+        setTimeout(() => {
+                seccionDescripcion.style.opacity = "0";
+                
+                setTimeout(() => {
+                    seccionDescripcion.innerHTML = reenderizarTarea(tar);
+                    seccionDescripcion.style.opacity = "1";
+                }, 200);
+            }, 300);
     }
-
-    let fechaVieja = tar.dia;
-    
-    tar.tarea = document.getElementById("tareaModificada").value;
-    tar.descripcion = document.getElementById("descripcionInput").value;
-    tar.dia = nuevaFecha;
-    tar.hora = nuevaHora;
-
-    tareas.sort((a, b) => a.hora.localeCompare(b.hora));
-    guardarDatos();
-    
-    refrescarDia(fechaVieja); 
-
-    if (fechaVieja !== nuevaFecha) {
-        refrescarDia(nuevaFecha); 
-    }
-    
-    setTimeout(() => {
-            seccionDescripcion.style.opacity = "0";
-            
-            setTimeout(() => {
-                seccionDescripcion.innerHTML = reenderizarTarea(tar);
-                seccionDescripcion.style.opacity = "1";
-            }, 200);
-        }, 300);
-}
 });
 
         // CHECKBOX 

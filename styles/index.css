@@ -178,6 +178,18 @@ main {
 .seccion-formulario button:hover {
   background-color: #1d4ed8;
 }
+
+#errorHora {
+    color: red;
+    display: none;
+    font-weight: 500;
+}
+#errorFormulario {
+    padding: 2rem 0 0 0;
+    color: red;
+    font-weight: 600;
+    display: none;
+}
 /*Primera seccion*/
 
 /*segunda seccion, tablero*/
@@ -503,7 +515,11 @@ img.cerrar:hover {
     background-color: #1a44a0;
     font-weight: 500;
 }
-
+#errorHoraModf {
+    color: darkred;
+    display: none;
+    font-weight: 500;
+}
 #mensajeEliminar {
     position: absolute;
     top: 50%;

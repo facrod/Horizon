@@ -41,12 +41,16 @@
                 <label>Día</label>
                 <input type="date" id="diaTarea">
 
-                <label>Horario</label>
+                <label for="">Hora de inicio</label>
                 <input type="time" id="horaTarea">
-
+            
+                <label for="">Hora de finalización</label>
+                <input type="time" id="horaTareaFinalizacion">
+                <span id="errorHora">La hora de fin debe ser posterior a la de inicio</span>
                 <label>Agrega una descripción (opcional)</label>
                 <textarea id="descripcionTarea" cols="30" rows="10"></textarea>
 
+                <span id="errorFormulario">Faltan rellenar campos!</span>
                 <input type="submit" value="subir" id="btnAgregarTarea">
             </form>
         </section>
