@@ -313,6 +313,10 @@ main.whiteMode {
     margin: .5rem;
     border-radius: .5rem;
     position: relative;
+    /* PARCHE PARA PERMITIR DROP EN TELEFONOS, DE MOMENTO*/
+    touch-action: none; 
+    user-select: none;
+    -webkit-user-drag: element; /
 }
 .contenedor-tareas section.tarjeta p{
     width: 80%;
