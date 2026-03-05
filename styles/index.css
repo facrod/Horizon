@@ -101,7 +101,7 @@ nav ul li {
     position: absolute;
     left: 90%;
     top: 20%;
-    background-color: rgb(204, 202, 202);
+    background-color: rgb(196, 194, 194);
     border-radius: 1rem;
     cursor: pointer;
 }
@@ -707,8 +707,8 @@ footer a:hover{
 
 @media (max-width: 812px) {
     #toogle {
-        left: 5%;
-        top: 20%;
+        left: 4%;
+        top: 11%;
     }
     #darkMode {
         padding: .1rem .2rem .1rem .1rem;

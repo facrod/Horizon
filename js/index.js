@@ -168,7 +168,8 @@ function renderizarTareasInicio() {
 
     // 3. Filtramos y pintamos
     tareas.filter( t => {
-        let fechaTarea = new Date(t.dia.replace(/-/g, '\/'));
+        const [y,m,d] = t.dia.split("-");   //SOLUCIÓN PARA QUE SEA COMPATIBLE CON SAFARI
+        let fechaTarea = new Date(y, m-1, d);        
         return fechaTarea >= lunes && fechaTarea <= domingo;
     }).forEach(function(t) {
         pintarTarea(t);        
