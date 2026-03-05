@@ -34,7 +34,6 @@ const headerEstilos = document.getElementById("headerEstilos");
 const footerEstilos = document.getElementById("footerEstilos")
 const columnasEstilos = document.querySelectorAll(".columna")
 
-renderizadoEstilosInicial(mainEstilos, headerEstilos, footerEstilos, columnasEstilos)
 botonesEstilos.addEventListener("click", (e)=>{
     if (e.target.closest("#darkMode")) {
         botonesWhite.classList.remove("activo")
@@ -48,6 +47,7 @@ botonesEstilos.addEventListener("click", (e)=>{
             for (let i = 0; i < columnasEstilos.length; i++) {
                 columnasEstilos[i].classList.remove("whiteMode") 
             }
+            formAgregar.classList.remove("whiteMode");
         }
     }
     if (e.target.closest("#whiteMode")) {
@@ -62,6 +62,8 @@ botonesEstilos.addEventListener("click", (e)=>{
             for (let i = 0; i < columnasEstilos.length; i++) {
                 columnasEstilos[i].classList.add("whiteMode") 
             }
+            formAgregar.classList.add("whiteMode");
+
         }        
 
     }
@@ -91,7 +93,7 @@ const diasSemana = ["domingo", "lunes", "martes", "miercoles", "jueves", "vierne
 
 //-----------------------------------------FUNCIONES-------------------------------------------------
 
-function renderizadoEstilosInicial(main,header,footer,columnas) {
+function renderizadoEstilosInicial(main,header,footer,columnas, formulario) {
     let estiloPagina = JSON.parse(localStorage.getItem("estilo"))
     if (estiloPagina == "whiteMode") {
         main.classList.add("whiteMode")
@@ -99,7 +101,9 @@ function renderizadoEstilosInicial(main,header,footer,columnas) {
         footer.classList.add("whiteMode")    
         for (let i = 0; i < columnas.length; i++) {
             columnas[i].classList.add("whiteMode") 
-        }    
+        }
+        formulario.classList.add("whiteMode")    
+
     } else {
         main.classList.remove("whiteMode")
         header.classList.remove("whiteMode")
@@ -107,10 +111,10 @@ function renderizadoEstilosInicial(main,header,footer,columnas) {
         for (let i = 0; i < columnas.length; i++) {
             columnas[i].classList.remove("whiteMode") 
         }           
+        formulario.classList.remove("whiteMode")    
+
     }
-
 }
-
 
 function obtenerLimitesSemanales() {
     let hoy = new Date();
@@ -342,6 +346,7 @@ function inicializarApp() {
 }
 
 inicializarApp();
+renderizadoEstilosInicial(mainEstilos, headerEstilos, footerEstilos, columnasEstilos, formAgregar)
 
 //--------------------------LOGICA PARA AGREGAR UNA TAREA NUEVA A LA BASE DE DATOS----------------------
 let inputs = [nombreTarea, diaTarea, horaTarea];

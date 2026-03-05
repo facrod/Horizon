@@ -156,9 +156,17 @@ main.whiteMode {
     align-items: center;
     flex-direction: column;
 }
-
+#agregarTarea.whiteMode {
+    background-color: rgb(77, 95, 197);
+    font-weight: 500;
+}
+#agregarTarea.activo.whiteMode {
+    background-color: rgb(77, 95, 197);
+    box-shadow: .5rem .5rem .5rem .1rem #74829c;
+    font-weight: 500;
+}
 #agregarTarea.activo {
-    box-shadow: 1.5rem 0rem 1em 1rem #0d1324;
+    box-shadow: .5rem .5rem .5rem .1rem #0d1324;
     max-height: 70rem;
     padding: 1rem;
 }
@@ -693,14 +701,14 @@ footer a:hover{
     }
     #mensajeEliminar button:nth-child(1){
         left: 85%;
-        top: 4%;
+        top: 8%;
     }
 }
 
 @media (max-width: 812px) {
     #toogle {
         left: 5%;
-        top: 10%;
+        top: 20%;
     }
     #darkMode {
         padding: .1rem .2rem .1rem .1rem;
