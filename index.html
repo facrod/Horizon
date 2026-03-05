@@ -7,7 +7,7 @@
     <title>Horizon</title>
 </head>
 <body>
-    <header>
+    <header id="headerEstilos">
         <h1>Horizon</h1>
         <nav>
              <ul>
@@ -23,13 +23,20 @@
                         <li><a href="">Primera semana</a></li>
                         <li><a href="">Segunda semana</a></li>
                         <li><a href="">Tercera semana</a></li>
-                        <li><a href="">Cuarta semana</a></li>
                     </ul>
+                </li>
+                <li id="toogle">
+                    <section id="darkMode">
+                        <img src="img/moonDark.png" alt="modo oscuro" id="moonDark">
+                    </section>
+                    <section id="whiteMode">
+                        <img src="img/sunDark.png" alt="modo claro" id="sunDark">
+                    </section>
                 </li>
             </ul>
         </nav>
     </header>
-    <main>
+    <main id="mainEstilos">
         <section class="seccion-formulario">
             <button id="btnDesplegar">
                 Agregar tarea
@@ -96,24 +103,8 @@
             
         </section>
     </main>
-    <footer>
-        <section>
-            <a href="">Inicio</a>
-            <a href="pages/calendario.html">calendario</a>
-        </section>
-        <section>
-            <h4>¿Quienes somos?</h4>
-            <p>Tu día, bajo control. Horizon nació para quienes buscan equilibrio entre sus responsabilidades y su tiempo libre. Diseñamos herramientas simples para que dejes de preocuparte por lo que sigue y empieces a disfrutar de lo que estás haciendo.</p>
-        </section>
-        <section>
-            <h4>Deja un comentario!</h4>
-            <form action="">
-                <label for="">Tu email</label>
-                <input type="email" name="" id="">
-                <label for="">Deja alguna duda/queja y pronto nuestro equipo se comunicara con usted!</label>
-                <textarea name="" id="" cols="30" rows="3"></textarea>
-            </form>
-        </section>
+    <footer id="footerEstilos">
+        <a href="https://github.com/facrod/Horizon#">Github</a>
     </footer>
     <script src="js/index.js"></script>
 </body>

@@ -24,6 +24,54 @@ document.addEventListener("click", (e) => {
         agregarTarea.classList.remove("activo");
     }
 });
+
+let botonesDark = document.getElementById("darkMode")
+let botonesWhite = document.getElementById("whiteMode")
+let botonesEstilos = document.getElementById("toogle")
+
+const mainEstilos = document.getElementById("mainEstilos");
+const headerEstilos = document.getElementById("headerEstilos");
+const footerEstilos = document.getElementById("footerEstilos")
+const columnasEstilos = document.querySelectorAll(".columna")
+
+renderizadoEstilosInicial(mainEstilos, headerEstilos, footerEstilos, columnasEstilos)
+botonesEstilos.addEventListener("click", (e)=>{
+    if (e.target.closest("#darkMode")) {
+        botonesWhite.classList.remove("activo")
+        botonesDark.classList.toggle("activo")
+        let estiloPagina = "darkMode"
+        localStorage.setItem("estilo", JSON.stringify(estiloPagina))
+        if (mainEstilos.classList.contains("whiteMode")) {
+            mainEstilos.classList.remove("whiteMode")
+            headerEstilos.classList.remove("whiteMode")
+            footerEstilos.classList.remove("whiteMode")
+            for (let i = 0; i < columnasEstilos.length; i++) {
+                columnasEstilos[i].classList.remove("whiteMode") 
+            }
+        }
+    }
+    if (e.target.closest("#whiteMode")) {
+        botonesDark.classList.remove("activo")
+        botonesWhite.classList.toggle("activo")
+        let estiloPagina = "whiteMode"
+        localStorage.setItem("estilo", JSON.stringify(estiloPagina))
+        if (!mainEstilos.classList.contains("whiteMode")) {
+            mainEstilos.classList.add("whiteMode")
+            headerEstilos.classList.add("whiteMode")
+            footerEstilos.classList.add("whiteMode")
+            for (let i = 0; i < columnasEstilos.length; i++) {
+                columnasEstilos[i].classList.add("whiteMode") 
+            }
+        }        
+
+    }
+})
+document.addEventListener("click", (e)=>{
+    if (!botonesDark.contains(e.target) && !botonesWhite.contains(e.target)) {
+        botonesWhite.classList.remove("activo");
+        botonesDark.classList.remove("activo")
+    }
+})
 //-----------------------------------------------------------------------------------------------------
 
 //TRAIGO DATOS DEL LOCAL
@@ -42,6 +90,28 @@ const diasSemana = ["domingo", "lunes", "martes", "miercoles", "jueves", "vierne
 
 
 //-----------------------------------------FUNCIONES-------------------------------------------------
+
+function renderizadoEstilosInicial(main,header,footer,columnas) {
+    let estiloPagina = JSON.parse(localStorage.getItem("estilo"))
+    if (estiloPagina == "whiteMode") {
+        main.classList.add("whiteMode")
+        header.classList.add("whiteMode")
+        footer.classList.add("whiteMode")    
+        for (let i = 0; i < columnas.length; i++) {
+            columnas[i].classList.add("whiteMode") 
+        }    
+    } else {
+        main.classList.remove("whiteMode")
+        header.classList.remove("whiteMode")
+        footer.classList.remove("whiteMode")    
+        for (let i = 0; i < columnas.length; i++) {
+            columnas[i].classList.remove("whiteMode") 
+        }           
+    }
+
+}
+
+
 function obtenerLimitesSemanales() {
     let hoy = new Date();
     let diaActual = hoy.getUTCDay();
@@ -156,7 +226,7 @@ function reenderizarTarea(tarjeta) {
                 <p>${tarjeta.descripcion}</p>    
             </article>
             <article class="dia-hora-descripcion">
-                <p>${tarjeta.dia}</p>
+                <p>Fecha: ${tarjeta.dia}</p>
                 <p>Inicio: ${tarjeta.hora}</p>
                 <p>Fin: ${tarjeta.horaFinalizacion}
                 <p class="estadoMsj">Estado: ${tarjeta.estado ? "Completa" : "incompleta"}</p>
@@ -247,8 +317,31 @@ function obtenerTareaSolapada(dia, inicio, fin, idActual = null) {
 }
 //-----------------------------------------------------------------------------------------------------
 
-establecerLimitesCalendario();
-renderizarTareasInicio()
+
+function inicializarApp() {
+    if (tareas.length === 0) {
+        const limites = obtenerLimitesSemanales(); 
+        
+        const bienvenida = {
+            tarea: "¡Bienvenido a Horizon! 🚀 Clickeame para más información.",
+            dia: limites.min, 
+            hora: "09:00",
+            horaFinalizacion: "10:00",
+            descripcion: "Buenas! soy HORIZON, tu calendario semanal. Planifica tus tareas para tener una vida más organizada. Puedes añadir una tarea nueva con sus respectivos detalles (hora de inicio, hora de finalización, descripción, día). Al clickear esta nueva tarea puedes editarla, eliminarla y marcarla como terminada. Crea una tarea y comencemos!",
+            estado: false,
+            id: Date.now()
+        };
+        
+        tareas.push(bienvenida);
+        guardarDatos();
+    }
+
+    // Ejecutamos los procesos iniciales
+    establecerLimitesCalendario();
+    renderizarTareasInicio();
+}
+
+inicializarApp();
 
 //--------------------------LOGICA PARA AGREGAR UNA TAREA NUEVA A LA BASE DE DATOS----------------------
 let inputs = [nombreTarea, diaTarea, horaTarea];
