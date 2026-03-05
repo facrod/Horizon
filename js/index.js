@@ -188,7 +188,7 @@ function pintarTarea(tarea) {
     let diaSection = document.getElementById(diasSemana[diaIndex])
 
     diaSection.innerHTML += `
-    <section class="tarjeta" data-id="${tarea.id}">
+    <section class="tarjeta" data-id="${tarea.id}" draggable="true">
         <article class="tarjetaI" id="${tarea.id}">    
             <h4> Tarea </h4>        
             <p> ${tarea.tarea} </p>
@@ -297,9 +297,8 @@ function obtenerTareaSolapada(dia, inicio, fin, idActual = null) {
     //Convertimos las horas de la tarea que queremos agregar/editar a minutos
     const nuevaInicio = horaAMinutos(inicio);
     const nuevaFin = horaAMinutos(fin);
-
     // Buscamos dentro del array tareas
-    return tareas.find(function(t) {
+    return tareas.find( t => {
         // Si no es el mismo día, no hay choque posible, pasamos a la siguiente
         if (t.dia !== dia) {
             return false;
@@ -496,6 +495,104 @@ tablero.addEventListener("change", (e) => {
 //---------------------------------------------------------------------------------------------------
 
 
+//------------------------------------------FUNCIONALIDAD DROP-----------------------------------
+tablero.addEventListener("dragenter", (e) => {
+    let columna = e.target.closest(".columna");
+    if (columna) {
+        columna.classList.add("drag-over");
+    }
+});
+
+tablero.addEventListener("dragleave", (e) => {
+    let columna = e.target.closest(".columna");
+
+    if (columna && !columna.contains(e.relatedTarget)) {
+        columna.classList.remove("drag-over");
+    }
+});
+tablero.addEventListener("dragstart", (e)=>{
+    let tarjetaArrastrada = Number (e.target.dataset.id)
+    localStorage.setItem("idTarea", JSON.stringify(tarjetaArrastrada))
+})
+tablero.addEventListener("dragover", (e) => {
+    e.preventDefault(); // Esto habilita el lugar como válido para el drop
+});
+tablero.addEventListener("drop", (e)=>{
+    e.preventDefault();
+
+    let article = e.target.closest(".columna");
+    
+    if (article) {
+        article.classList.remove("drag-over");
+        let idTarea = JSON.parse(localStorage.getItem("idTarea"))
+        let sectionInterno = article.querySelector("section");
+        
+        let diaId = sectionInterno.id;
+
+        function encontrarDia(diaStringNombre) {
+            let numeroDia = 0;
+            switch (diaStringNombre) {
+                case "domingo":
+                    numeroDia = 0;
+                    break;
+                case "lunes":
+                    numeroDia = 1;
+                    break;
+                case "martes":
+                    numeroDia = 2;
+                    break;
+                case "miercoles":
+                    numeroDia = 3;
+                    break;
+                case "jueves":
+                    numeroDia = 4;
+                    break;
+                case "viernes":
+                    numeroDia = 5;
+                    break;
+                case "sabado":
+                    numeroDia = 6;
+                    break;
+            }
+            let fechaDiaDrop = new Date();
+            fechaDiaDrop.setHours(0, 0, 0, 0);
+            fechaDiaDrop.setDate(fechaDiaDrop.getDate() + (numeroDia - fechaDiaDrop.getDay()))
+            let y = fechaDiaDrop.getFullYear().toString()
+            let m = (fechaDiaDrop.getMonth() + 1).toString().padStart(2, '0');
+            let d = fechaDiaDrop.getDate().toString().padStart(2, '0');
+            let fechaDropeoParseada = `${y}-${m}-${d}`;
+            return fechaDropeoParseada
+        }
+        let fechaDropeo = encontrarDia(diaId)
+        let tareaEncontrada = tareas.filter(t => t.id == idTarea)
+
+        let fechaVieja = tareaEncontrada[0].dia
+        let conflicto = obtenerTareaSolapada(fechaDropeo, tareaEncontrada[0].hora, tareaEncontrada[0].horaFinalizacion,tareaEncontrada[0].id);
+        if (conflicto) {
+                const tarjetaVisual = document.getElementById(idTarea).parentElement;
+
+                if (tarjetaVisual) {
+                    tarjetaVisual.classList.add("shake-error");
+
+                    setTimeout(() => {
+                        tarjetaVisual.classList.remove("shake-error");
+                    }, 500);
+                }
+                return;
+            } 
+        tareaEncontrada[0].dia = fechaDropeo
+        
+        guardarDatos()
+        refrescarDia(fechaVieja)
+        refrescarDia(fechaDropeo)
+        if (seccionDescripcion) {
+            seccionDescripcion.innerHTML = reenderizarTarea(tareaEncontrada[0]);
+        }
+        }
+})
+//---------------------------------------------------------------------------------------------------
+
+
 //-----------------------Acciones de la seccion descripcion------------------------------------------
 seccionDescripcion.addEventListener("click", (e) => {
 
@@ -575,28 +672,39 @@ seccionDescripcion.addEventListener("click", (e) => {
 
 
     //LOGICA DE HORARIOS EN EDITAR
-seccionDescripcion.addEventListener("change", (e)=>{
+seccionDescripcion.addEventListener("change", (e) => {
+    // Corregir límites del calendario al cambiar el día
     let inputModificarDia = document.getElementById("diaModificado");
-    if(inputModificarDia) {
-        inputModificarDia.min = formatear(lunes);
-        inputModificarDia.max = formatear(domingo);
+    if (inputModificarDia) {
+        const limites = obtenerLimitesSemanales();
+        inputModificarDia.min = limites.min;
+        inputModificarDia.max = limites.max;
     }
-    if (e.target.closest("#horaModificada")) {
-        let horaFinalizacionModificada = document.getElementById("horaTareaFinalizacionModificada")
-        horaFinalizacionModificada.value = e.target.closest("#horaModificada").value
-    }
-    if (e.target.closest("#horaTareaFinalizacionModificada")) {
-        let msjError = document.getElementById("errorHoraModf");
-        let horaFinalizacionMod = e.target.closest("#horaTareaFinalizacionModificada")
-        let horaInicioMod = document.getElementById("horaModificada")
-        if (horaInicioMod.value >= horaFinalizacionMod.value) {
-            msjError.style.display = "block"
-            console.log("error")
-        } else {
-            msjError.style.display = "none";
+
+    // Sincronizar hora de inicio con hora de fin
+    // Usamos e.target.id para ser precisos
+    if (e.target.id === "horaModificada") {
+        let horaFinalizacionModificada = document.getElementById("horaTareaFinalizacionModificada");
+        if (horaFinalizacionModificada) {
+            horaFinalizacionModificada.value = e.target.value;
         }
     }
-})
+
+    // Validar solapamiento de horas (Inicio < Fin)
+    if (e.target.id === "horaTareaFinalizacionModificada" || e.target.id === "horaModificada") {
+        let msjError = document.getElementById("errorHoraModf");
+        let horaInicioMod = document.getElementById("horaModificada");
+        let horaFinalizacionMod = document.getElementById("horaTareaFinalizacionModificada");
+
+        if (horaInicioMod && horaFinalizacionMod && msjError) {
+            if (horaInicioMod.value >= horaFinalizacionMod.value) {
+                msjError.style.display = "block";
+            } else {
+                msjError.style.display = "none";
+            }
+        }
+    }
+});
 
         // EDITAR (FUNCIONALIDAD)
 
@@ -636,6 +744,7 @@ seccionDescripcion.addEventListener("submit", (e) => {
         tareas.sort((a, b) => a.hora.localeCompare(b.hora));
         guardarDatos();
         
+        console.log(fechaVieja)
         refrescarDia(fechaVieja); 
 
         if (fechaVieja !== nuevaFecha) {

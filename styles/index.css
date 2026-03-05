@@ -296,13 +296,12 @@ main.whiteMode {
 .columna::-webkit-scrollbar-thumb:hover {
     background: #888;
 }
-
-
-.contenedor-tareas {
-    display: flex;
-    flex-direction: column
+.columna.drag-over {
+    border: 2px dashed #4a90e2 !important;
+    background-color: rgba(74, 144, 226, 0.1);
+    transform: scale(1.02);
+    transition: all 0.2s ease;
 }
-
 .contenedor-tareas section.tarjeta {
     display: flex;
     flex-direction: column;
@@ -370,6 +369,17 @@ img.imgCheckTablero {
 }
 .tarjeta:has(.checkBoxTablero:checked) {
     background-color: rgba(245, 244, 244, 0.712); 
+}
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-8px); }
+    50% { transform: translateX(8px); }
+    75% { transform: translateX(-8px); }
+}
+#tablero .tarjeta.shake-error {
+    animation: shake 0.4s ease-in-out;
+    border: 2px solid #ff4d4d;
+    box-shadow: 0 0 10px rgba(255, 77, 77, 0.5);
 }
 
 /*segunda seccion, tablero*/
