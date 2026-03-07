@@ -1,24 +1,29 @@
-let botonMostrarDias = document.getElementById('mostrarDias');
-const listaDias = document.getElementById('listaDias')
+export function obtenerLimitesSemanales() {
+    let hoy = new Date();
+    let diaActual = hoy.getUTCDay();
+    let diferenciaAlLunes = (diaActual === 0) ? 6 : diaActual - 1;
 
-botonMostrarDias.addEventListener("click", (e)=>{
-    e.stopPropagation()
-    listaDias.classList.toggle("abierto");
-})
+    let lunes = new Date(hoy);
+    lunes.setDate(hoy.getDate() - diferenciaAlLunes);
 
-let btnDesplegar = document.getElementById("btnDesplegar");
-let agregarTarea = document.getElementById("agregarTarea");
+    let domingo = new Date(lunes);
+    domingo.setDate(lunes.getDate() + 6);
 
-btnDesplegar.addEventListener("click", (e)=>{
-    e.stopPropagation()
-    agregarTarea.classList.toggle("activo")
-})
-document.addEventListener("click", (e) => {
-    if (!botonMostrarDias.contains(e.target) && !listaDias.contains(e.target)) {
-        listaDias.classList.remove("abierto");
+    function formatear(fecha) {
+        let d = fecha.getDate().toString().padStart(2, '0');
+        let m = (fecha.getMonth() + 1).toString().padStart(2, '0');
+        let y = fecha.getFullYear();
+        return y + "-" + m + "-" + d;
     }
 
-    if (!btnDesplegar.contains(e.target) && !agregarTarea.contains(e.target)) {
-        agregarTarea.classList.remove("activo");
-    }
-});
+    return { 
+        min: formatear(lunes), 
+        max: formatear(domingo) 
+    };
+}
+
+export function establecerLimitesCalendario(diaTarea) {
+    const limites = obtenerLimitesSemanales();
+    diaTarea.min = limites.min;
+    diaTarea.max = limites.max;
+}
