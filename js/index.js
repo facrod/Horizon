@@ -597,6 +597,7 @@ tablero.addEventListener("drop", (e)=>{
 seccionDescripcion.addEventListener("click", (e) => {
 
             // CERRAR DESCRIPCION
+            
     if (e.target.closest(".cerrar")) {
         seccionDescripcion.classList.remove("activo");
         return;
@@ -634,8 +635,6 @@ seccionDescripcion.addEventListener("click", (e) => {
         }
     }
 
-    
-
             //ELIMINAR
 
     if (e.target.closest(".accion-eliminar")) {
@@ -657,17 +656,6 @@ seccionDescripcion.addEventListener("click", (e) => {
         }
         seccionDescripcion.classList.remove("activo");
     }
-        /*
-        let idTarea = e.target.closest(".accion-eliminar").dataset.id;
-        tareas = tareas.filter (t => t.id !== Number(idTarea))        
-        guardarDatos()
-        const articleTarea = document.getElementById(idTarea);
-        if (articleTarea) {
-            articleTarea.parentElement.remove();
-        }
-        seccionDescripcion.classList.remove("activo");
-        */
-    
 });
 
 
