@@ -1,6 +1,7 @@
 export function obtenerLimitesSemanales() {
     let hoy = new Date();
-    let diaActual = hoy.getUTCDay();
+    hoy.setHours(0, 0, 0, 0);
+    let diaActual = hoy.getDay(); 
     let diferenciaAlLunes = (diaActual === 0) ? 6 : diaActual - 1;
 
     let lunes = new Date(hoy);
@@ -13,7 +14,7 @@ export function obtenerLimitesSemanales() {
         let d = fecha.getDate().toString().padStart(2, '0');
         let m = (fecha.getMonth() + 1).toString().padStart(2, '0');
         let y = fecha.getFullYear();
-        return y + "-" + m + "-" + d;
+        return `${y}-${m}-${d}`;    
     }
 
     return { 
