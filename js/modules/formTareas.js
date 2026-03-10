@@ -1,12 +1,13 @@
 import { tareas, guardarDatos } from "./storage.js";
 import { obtenerTareaSolapada } from "./solapamientos.js";
+import { establecerLimitesCalendario } from "./calendario.js";
 import { refrescarDia } from "./render.js";
 import { diasSemana } from "./utils.js";
 
 export function inicializarFormulario() {
-
-    let nombreTarea = document.getElementById("nombreTarea");
     let diaTarea = document.getElementById("diaTarea");
+    establecerLimitesCalendario(diaTarea);
+    let nombreTarea = document.getElementById("nombreTarea");
     let horaTarea = document.getElementById("horaTarea");
     let horaTareaFinalizacion = document.getElementById("horaTareaFinalizacion");
     let descripcionTarea = document.getElementById("descripcionTarea");

@@ -37,7 +37,6 @@ function inicializarApp() {
     }
 
     // Ejecutamos los procesos iniciales
-    establecerLimitesCalendario(diaTarea);
     renderizarTareasInicio(diasSemana);
 }
 
