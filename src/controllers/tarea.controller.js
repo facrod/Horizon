@@ -40,7 +40,7 @@ async function getTareaId (req, res) {
 }
 async function addTarea (req, res) {
     try {
-        const { tarea, descripcion, hora, horaFinalizacion, dia} = req.body
+        const { tarea, descripcion = "", hora, horaFinalizacion, dia} = req.body
         const usuario_id = req.payload._id  // viene del token
         const tareaNueva = await tareasSchema.create({
             tarea,
@@ -50,7 +50,7 @@ async function addTarea (req, res) {
             horaFinalizacion,
             usuario_id,
         })
-        
+        console.log(tareaNueva)
         return res.json({ ok: true, data: tareaNueva })
     } catch (error) {
         return res.json({ ok: false, error })

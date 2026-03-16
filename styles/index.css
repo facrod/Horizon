@@ -40,6 +40,7 @@ header {
 header.whiteMode {
     background-color: #1c3d7a;
 }
+/*
 nav {
     display: flex;
     justify-content: center;
@@ -62,7 +63,8 @@ nav > ul {
     list-style: none;
 }
 
-/*animacion barra de dias */
+animacion barra de dias 
+
 nav ul li {
     position: relative;
 }
@@ -114,6 +116,24 @@ nav ul li {
 }
 .login:hover {
     background-color: rgb(4, 170, 4);
+}*/
+nav li {
+    list-style: none;
+}
+nav button {
+    background-color: red;
+    color:white;
+    border: 1px solid red;
+    border-radius: .5rem;
+    padding: .4rem 1rem;
+    position: absolute;
+    top: 25%;
+    left: 90%;
+    transition: background-color .3s ease, border .3s ease;
+}
+nav button:hover {
+    background-color: rgb(204, 4, 4);
+    border: 1px solid white;
 }
 #toogle {
     display: flex;

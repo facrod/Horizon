@@ -6,8 +6,8 @@ if (!estaLogueado()) {
 }
 
 import { obtenerLimitesSemanales, establecerLimitesCalendario } from "./modules/calendario.js";
-import { inicializarHeaderUI } from "./modules/headerUI.js";
 import { cargarTareas, guardarDatos} from "./modules/storage.js";
+import {inicializarHeaderUI} from "./modules/headerUI.js"
 import { renderizarTareasInicio} from "./modules/render.js";
 import { inicializarTablero } from "./modules/tablero.js";
 import { renderizadoEstilosInicial, inicializarEstilos } from "./modules/estilos.js";

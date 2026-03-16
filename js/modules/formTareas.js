@@ -16,13 +16,11 @@ export function inicializarFormulario() {
     let inputs = [nombreTarea, diaTarea, horaTarea];
 
     formAgregar.addEventListener("input", (e) => {
+        const errorSpan = document.getElementById("errorHora");
 
         if (e.target.closest("#horaTarea")) {
             horaTareaFinalizacion.value = horaTarea.value;
         }
-
-        const errorSpan = document.getElementById("errorHora");
-
         if (horaTareaFinalizacion.value && horaTarea.value) {
             if (horaTareaFinalizacion.value <= horaTarea.value) {
                 errorSpan.style.display = "block";
@@ -33,7 +31,7 @@ export function inicializarFormulario() {
 
     });
 
-    formAgregar.addEventListener("submit", (e) => {
+    formAgregar.addEventListener("submit", async (e) => {
 
         e.preventDefault();
 
@@ -66,27 +64,14 @@ export function inicializarFormulario() {
             return;
         }
 
-        let tarea = {
-
+        const tarea = {
             tarea: nombreTarea.value,
             dia: diaTarea.value,
             hora: horaTarea.value,
             horaFinalizacion: horaTareaFinalizacion.value,
             descripcion: descripcionTarea.value,
             estado: false,
-            id: Date.now(),
-
         };
-
-        const existeDuplicado = tareas.some(
-            t => t.dia === tarea.dia && t.hora === tarea.hora
-        );
-
-        if (existeDuplicado) {
-            alert("Ya tienes una tarea programada para ese mismo día y hora.");
-            return;
-        }
-
         const conflicto = obtenerTareaSolapada(
             tarea.dia,
             tarea.hora,
@@ -97,18 +82,19 @@ export function inicializarFormulario() {
             alert(`¡Conflicto! Este horario ya está ocupado por: "${conflicto.tarea}" (${conflicto.hora} - ${conflicto.horaFinalizacion})`);
             return;
         }
+        const resultado = await guardarDatos(tarea);
+        if(resultado && resultado.ok) {
+            tareas.sort((a, b) => a.hora.localeCompare(b.hora));
 
-        tareas.push(tarea);
-        tareas.sort((a, b) => a.hora.localeCompare(b.hora));
-
-        guardarDatos();
-
-        refrescarDia(tarea.dia, diasSemana);
-
-        formAgregar.reset();
-
-        formAgregar.classList.remove("activo");
-
+            refrescarDia(tarea.dia, diasSemana);
+            
+            formAgregar.reset();
+            formAgregar.classList.remove("activo");
+            msjErrorFormulario.style.display = "none";           
+        } else {
+            console.log(resultado)
+            alert("No se pudo guardar la tarea en el servidor.");
+        }
     });
 
 }

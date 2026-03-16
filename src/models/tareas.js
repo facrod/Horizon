@@ -6,8 +6,7 @@ const tareasSchema = new Schema ({
         required: true,
     },
     descripcion: {
-        type: String,
-        required: true,
+        type: String
     },
     dia: {
         type: String,
