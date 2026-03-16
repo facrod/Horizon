@@ -11,7 +11,6 @@ import { inicializarFormulario } from "./modules/formTareas.js";
 
 import { inicializarDescripcion } from "./modules/descripcion/descripcionTarea.js";
 import { inicializarDescripcionEventos } from "./modules/descripcion/descripcionEventos.js";
-
 //-----------------------------------------------------------------------------------------------------
 const mainEstilos = document.getElementById("mainEstilos");
 const headerEstilos = document.getElementById("headerEstilos");
@@ -42,6 +41,7 @@ function inicializarApp() {
 
 inicializarApp();
 
+
 inicializarHeaderUI();
 
 const formAgregar = document.getElementById("agregarTarea");
@@ -60,5 +60,4 @@ inicializarTablero(tablero, diasSemana, seccionDescripcion);
 
 inicializarDescripcion(seccionDescripcion);
 inicializarDescripcionEventos(seccionDescripcion);
-
 

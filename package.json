@@ -1,0 +1,31 @@
+{
+  "name": "horizon",
+  "version": "1.0.0",
+  "description": "Backend-Horizon",
+  "homepage": "https://github.com/facrod/Horizon#readme",
+  "bugs": {
+    "url": "https://github.com/facrod/Horizon/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/facrod/Horizon.git"
+  },
+  "license": "ISC",
+  "author": "",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon src/server.js"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.14"
+  },
+  "dependencies": {
+    "bcrypt": "^6.0.0",
+    "cors": "^2.8.6",
+    "dotenv": "^17.3.1",
+    "express": "^5.2.1",
+    "jsonwebtoken": "^9.0.3",
+    "mongoose": "^9.3.0"
+  }
+}
