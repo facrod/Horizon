@@ -46,16 +46,22 @@ async function addUser(req, res) {
             fechaNacimiento,
             password: pw
         })
-        console.log(req.body)
         return res.json({
             ok:true,
             data: result
         })    
     } catch (error) {
-        return res.json({
-        ok: false,
-        error
-        })  
+        let mensajeUsuario = "Error al crear la cuenta";
+
+        //dato duplicado
+        if (error.code === 11000) {
+            mensajeUsuario = "El correo electrónico o el DNI ya están registrados";
+        }
+
+        return res.json({ 
+            ok: false, 
+            error: mensajeUsuario
+        });
     }
 }
 async function deleteUser(req, res) {

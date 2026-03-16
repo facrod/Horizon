@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../styles/login.css">
+    <title>Login</title>
+</head>
+<body>
+        <header id="headerEstilos">
+        <h1>Horizon</h1>
+        <nav>
+             <ul>
+                <li>
+                    <a href="../index.html">Inicio</a>
+                </li>
+                <li>
+                    <a href="calendario.html">Calendario</a>
+                </li>
+                <li class="login">
+                    <a href="">Ingresar</a>
+                </li>
+                <li>
+                    <button id="mostrarDias">Semanas</button>
+                    <ul id="listaDias" >
+                        <li><a href="">Primera semana</a></li>
+                        <li><a href="">Segunda semana</a></li>
+                        <li><a href="">Tercera semana</a></li>
+                    </ul>
+                </li>
+                <li id="toogle">
+                    <section id="darkMode">
+                        <img src="../img/moonDark.png" alt="modo oscuro" id="moonDark">
+                    </section>
+                    <section id="whiteMode">
+                        <img src="../img/sunDark.png" alt="modo claro" id="sunDark">
+                    </section>
+                </li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <form id="formLogin">
+            <h2>Horizon Login</h2>
+            <input type="email" id="correo" placeholder="Correo electrónico" required>
+            <input type="password" id="password" placeholder="Contraseña" required>
+            <p id="errorLogin" class="error">Usuario o contraseña incorrectos</p>
+            <button type="submit">Entrar</button>
+            <p class="cambio-form">¿No tienes cuenta? <span id="irARegistro">Regístrate aquí</span></p>
+        </form>
+
+        <form id="formRegister" class="hidden">
+            <h2>Crear Cuenta</h2>
+            <input type="text" id="regNombre" placeholder="Nombre" required>
+            <input type="text" id="regApellido" placeholder="Apellido" required>
+            <input type="text" id="regDni" placeholder="DNI" required>
+            <input type="date" id="regFecha" required>
+            <input type="email" id="regCorreo" placeholder="Correo electrónico" required>
+            <input type="password" id="regPassword" placeholder="Contraseña" required>
+            <p id="errorRegister" class="error"></p>
+            <button type="submit">Registrarse</button>
+            <p class="cambio-form">¿Ya tienes cuenta? <span id="irALogin">Inicia sesión</span></p>
+        </form>
+        
+    </main>
+    <footer id="footerEstilos">
+        <a href="https://github.com/facrod/Horizon#">Github</a>
+    </footer>
+    <script type="module" src="../js/modules/login-registro.js"></script>
+</body>
+</html>

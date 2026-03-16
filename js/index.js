@@ -1,9 +1,14 @@
+import { estaLogueado } from "./modules/login-registro.js";
+
+if (!estaLogueado()) {
+    // Si no tiene token, al login
+    window.location.href = "pages/login.html"; 
+}
+
 import { obtenerLimitesSemanales, establecerLimitesCalendario } from "./modules/calendario.js";
 import { inicializarHeaderUI } from "./modules/headerUI.js";
-import { tareas, guardarDatos} from "./modules/storage.js";
-import { 
-    renderizarTareasInicio,
-} from "./modules/render.js";
+import { cargarTareas, guardarDatos} from "./modules/storage.js";
+import { renderizarTareasInicio} from "./modules/render.js";
 import { inicializarTablero } from "./modules/tablero.js";
 import { renderizadoEstilosInicial, inicializarEstilos } from "./modules/estilos.js";
 import { diasSemana } from "./modules/utils.js";
@@ -16,9 +21,11 @@ const mainEstilos = document.getElementById("mainEstilos");
 const headerEstilos = document.getElementById("headerEstilos");
 const footerEstilos = document.getElementById("footerEstilos");
 const columnasEstilos = document.querySelectorAll(".columna");
+const tablero = document.getElementById("tablero");
+const seccionDescripcion = document.getElementById("descripcion");
 
-function inicializarApp() {
-    if (tareas.length === 0) {
+async function inicializarApp() {
+   /* if (tareas.length === 0) {
         const limites = obtenerLimitesSemanales(); 
         
         const bienvenida = {
@@ -34,13 +41,16 @@ function inicializarApp() {
         tareas.push(bienvenida);
         guardarDatos();
     }
-
+    */
     // Ejecutamos los procesos iniciales
+    await cargarTareas();
     renderizarTareasInicio(diasSemana);
+    inicializarTablero(tablero, diasSemana, seccionDescripcion);
+    inicializarDescripcion(seccionDescripcion);
+
 }
 
 inicializarApp();
-
 
 inicializarHeaderUI();
 
@@ -52,12 +62,6 @@ inicializarEstilos(formAgregar)
 inicializarFormulario();
 //------------------------------------------------------------------------------------------------
 
-//------------------------------CARGADO DE TAREAS EN EL TABLERO------------------------------------------
-const tablero = document.getElementById("tablero");
-const seccionDescripcion = document.getElementById("descripcion");
-inicializarTablero(tablero, diasSemana, seccionDescripcion);
-//---------------------------------------------------------------------------------------------------
-
-inicializarDescripcion(seccionDescripcion);
 inicializarDescripcionEventos(seccionDescripcion);
+
 

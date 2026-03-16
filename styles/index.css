@@ -95,11 +95,30 @@ nav ul li {
 #listaDias li:hover {
     background-color: #3a3a3a;
 }
-
+.login {
+    position: absolute;
+    top: 20%;
+    left: 90%;
+    padding: .8rem 0;
+    border-radius: 1rem;
+    background-color: green;
+    transition: background-color .3s ease;
+}
+.login a {
+    padding: 1rem;
+    font-weight: 100;
+    transition: font-weight .3s ease;
+}
+.login a:hover{
+    font-weight: 400;
+}
+.login:hover {
+    background-color: rgb(4, 170, 4);
+}
 #toogle {
     display: flex;
     position: absolute;
-    left: 90%;
+    left: 2%;
     top: 20%;
     background-color: rgb(196, 194, 194);
     border-radius: 1rem;
@@ -428,8 +447,8 @@ img.imgCheckTablero {
 }
 #descripcion article.info-descripcion h3{
     width: 88%;
-    word-wrap: break-word;      /* Opción clásica */
-    overflow-wrap: break-word;  /* Estándar moderno */
+    word-wrap: break-word;      
+    overflow-wrap: break-word;  
     white-space: normal;
     padding-bottom: .5rem;
 }
@@ -555,7 +574,7 @@ img.cerrar:hover {
 
 #seccionDescripcionInfo {
     opacity: 1;
-    max-height: 30rem; /* Valor fijo también aquí */
+    max-height: 30rem; 
     overflow: hidden;
     transition: all .4s ease;
 }
@@ -689,20 +708,19 @@ footer a:hover{
 @media (max-width: 480px) {
  
     .acciones-descripcion {
-        display: flex; /* Quitamos el display: none previo */
-        flex-direction: column; /* Apilamos uno arriba del otro */
-        align-items: stretch; /* OBLIGA a que todos midan lo mismo de ancho */
-        gap: 1rem; /* Espacio uniforme entre botones */
+        display: flex; 
+        flex-direction: column; 
+        align-items: stretch; 
+        gap: 1rem; 
         padding: 1rem;
     }
 
-    /* Reseteamos los botones para que no tengan márgenes raros */
     #descripcion button.accion-editar, 
     #descripcion button.accion-eliminar, 
     #descripcion label.custom-checkbox {
-        margin: 0; /* Quitamos el margin-left: auto y el margin-right */
-        width: 100%; /* Que ocupen todo el ancho del contenedor */
-        justify-content: center; /* Centramos el texto/iconos adentro */
+        margin: 0; 
+        width: 100%; 
+        justify-content: center; 
         box-sizing: border-box;
     }
     #descripcion.activo {

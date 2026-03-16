@@ -17,6 +17,9 @@
                 <li>
                     <a href="pages/calendario.html">Calendario</a>
                 </li>
+                <li class="login">
+                    <a href="pages/login.html">Ingresar</a>
+                </li>
                 <li>
                     <button id="mostrarDias">Semanas</button>
                     <ul id="listaDias" >
@@ -43,16 +46,16 @@
             </button>
             <form action="" id="agregarTarea">
                 <label>Nombre de la tarea</label>
-                <input type="text" id="nombreTarea">
+                <input type="text" id="nombreTarea" required>
 
                 <label>Día</label>
-                <input type="date" id="diaTarea">
+                <input type="date" id="diaTarea" required>
 
                 <label for="">Hora de inicio</label>
-                <input type="time" id="horaTarea">
+                <input type="time" id="horaTarea" required>
             
                 <label for="">Hora de finalización</label>
-                <input type="time" id="horaTareaFinalizacion">
+                <input type="time" id="horaTareaFinalizacion" required>
                 <span id="errorHora">La hora de fin debe ser posterior a la de inicio</span>
                 <label>Agrega una descripción (opcional)</label>
                 <textarea id="descripcionTarea" cols="30" rows="10"></textarea>
