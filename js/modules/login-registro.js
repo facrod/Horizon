@@ -1,4 +1,4 @@
-const API_URL = "horizon-production-46a9.up.railway.app";
+const API_URL = "https://horizon-production-46a9.up.railway.app";
 
 export async function login(correo, password) {
     try {
