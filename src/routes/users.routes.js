@@ -7,13 +7,13 @@ router.get("/usuario", getUsers)
 
 router.post("/usuario/login", login)
 
-router.get("/usuario/:id", getUserId)
-
 router.post("/usuario", addUser)
 
-router.put ("/usuario/:id", authenticate, editUser)
+router.get("/perfil", authenticate, getUserId)
 
-router.delete("/usuario/:id", deleteUser)
+router.put ("/perfil", authenticate, editUser)
+
+router.delete("/perfil", authenticate, deleteUser)
 
 
 export default router;

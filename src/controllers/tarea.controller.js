@@ -111,9 +111,21 @@ async function logicalDeleteTarea (req, res) {
         })
     }
 }
+async function getTareasEliminadas(req, res) {
+    try {
+        const usuario_id = req.payload._id;
+        const results = await tareasSchema.find({
+            active: false,
+            usuario_id
+        });
+        return res.json({ ok: true, data: results })
+    } catch (error) {
+        return res.json({ ok: false, error })
+    }
+}
 async function activateTarea (req, res) {
      try {
-        const { id } = req.params;
+        const { id } = req.params
         const usuario_id = req.payload._id;
         const updatedTarea = await tareasSchema.findOneAndUpdate(
             { _id:id, usuario_id: usuario_id}, 
@@ -144,5 +156,6 @@ export {
     addTarea,
     editTarea,
     logicalDeleteTarea,
-    activateTarea
+    activateTarea,
+    getTareasEliminadas
 }

@@ -1,5 +1,9 @@
+import { cargarUsuario, editarUsuario } from "./storageUser.js"
+
+const usuario = await cargarUsuario()
+
 export function renderizadoEstilosInicial(main,header,footer,columnas, formulario) {
-    let estiloPagina = JSON.parse(localStorage.getItem("estilo"))
+    let estiloPagina = usuario.data.result.tema
     if (estiloPagina == "whiteMode") {
         main.classList.add("whiteMode")
         header.classList.add("whiteMode")
@@ -30,12 +34,12 @@ export function inicializarEstilos(formAgregar) {
     const footerEstilos = document.getElementById("footerEstilos")
     const columnasEstilos = document.querySelectorAll(".columna")
 
-    botonesEstilos.addEventListener("click", (e)=>{
+    botonesEstilos.addEventListener("click", async (e)=>{
         if (e.target.closest("#darkMode")) {
             botonesWhite.classList.remove("activo")
             botonesDark.classList.toggle("activo")
-            let estiloPagina = "darkMode"
-            localStorage.setItem("estilo", JSON.stringify(estiloPagina))
+            let estiloPagina = { tema: "darkMode" };
+            await editarUsuario(estiloPagina)
             if (mainEstilos.classList.contains("whiteMode")) {
                 mainEstilos.classList.remove("whiteMode")
                 headerEstilos.classList.remove("whiteMode")
@@ -49,8 +53,8 @@ export function inicializarEstilos(formAgregar) {
         if (e.target.closest("#whiteMode")) {
             botonesDark.classList.remove("activo")
             botonesWhite.classList.toggle("activo")
-            let estiloPagina = "whiteMode"
-            localStorage.setItem("estilo", JSON.stringify(estiloPagina))
+            let estiloPagina = { tema: "whiteMode" };
+            await editarUsuario(estiloPagina)
             if (!mainEstilos.classList.contains("whiteMode")) {
                 mainEstilos.classList.add("whiteMode")
                 headerEstilos.classList.add("whiteMode")
@@ -59,7 +63,6 @@ export function inicializarEstilos(formAgregar) {
                     columnasEstilos[i].classList.add("whiteMode") 
                 }
                 formAgregar.classList.add("whiteMode");
-
             }        
 
         }

@@ -1,6 +1,6 @@
 import { obtenerTareaSolapada } from "./solapamientos.js";
 import { renderizarTarea , refrescarDia } from "./render.js";
-import { tareas, guardarDatos } from "./storage.js";
+import { tareas, modificarTarea, cargarTareas } from "./storage.js";
 
 export function inicializarTablero(tablero, diasSemana, seccionDescripcion) {
 
@@ -9,8 +9,8 @@ export function inicializarTablero(tablero, diasSemana, seccionDescripcion) {
         const tarjeta = e.target.closest(".tarjetaI");
         if (!tarjeta) return;
 
-        const tareaId = Number(tarjeta.id);
-        const tareaEncontrada = tareas.find(t => t.id === tareaId);
+        const tareaId = tarjeta.id;
+        const tareaEncontrada = tareas.find(t => t._id === tareaId);
         if (!tareaEncontrada) return;
 
         // Le "pegamos" el ID al contenedor de la descripción como una etiqueta invisible
@@ -50,13 +50,14 @@ export function inicializarTablero(tablero, diasSemana, seccionDescripcion) {
     tablero.addEventListener("change", (e) => {
         if (!e.target.classList.contains("checkBoxTablero")) return; 
 
-        let idCheckboxTarjeta = Number(e.target.dataset.id);
-        let tareaClickeada = tareas.find(t => t.id === idCheckboxTarjeta);
+        let idCheckboxTarjeta = e.target.dataset.id;
+        let tareaClickeada = tareas.find(t => t._id === idCheckboxTarjeta);
         
         tareaClickeada.estado = !tareaClickeada.estado; 
-        
-        guardarDatos();
-        let idAbierto = Number(seccionDescripcion.dataset.tareaActivaId);
+
+        //Añadir función para modificar tarea existente
+        modificarTarea(tareaClickeada);
+        let idAbierto = seccionDescripcion.dataset.tareaActivaId;
         
         if (seccionDescripcion.classList.contains("activo") && idAbierto === idCheckboxTarjeta) {
             // Re-renderizamos la descripción para que cambie el texto e ícono al instante
@@ -80,13 +81,13 @@ export function inicializarTablero(tablero, diasSemana, seccionDescripcion) {
         }
     });
     tablero.addEventListener("dragstart", (e)=>{
-        let tarjetaArrastrada = Number (e.target.dataset.id)
+        let tarjetaArrastrada = e.target.dataset.id
         localStorage.setItem("idTarea", JSON.stringify(tarjetaArrastrada))
     })
     tablero.addEventListener("dragover", (e) => {
         e.preventDefault(); // Esto habilita el lugar como válido para el drop
     });
-    tablero.addEventListener("drop", (e)=>{
+    tablero.addEventListener("drop", async (e)=>{
         e.preventDefault();
 
         let article = e.target.closest(".columna");
@@ -132,11 +133,11 @@ export function inicializarTablero(tablero, diasSemana, seccionDescripcion) {
                 let fechaDropeoParseada = `${y}-${m}-${d}`;
                 return fechaDropeoParseada
             }
+            
             let fechaDropeo = encontrarDia(diaId)
-            let tareaEncontrada = tareas.filter(t => t.id == idTarea)
-
+            let tareaEncontrada = tareas.filter(t => t._id == idTarea)
             let fechaVieja = tareaEncontrada[0].dia
-            let conflicto = obtenerTareaSolapada(fechaDropeo, tareaEncontrada[0].hora, tareaEncontrada[0].horaFinalizacion,tareaEncontrada[0].id);
+            let conflicto = obtenerTareaSolapada(fechaDropeo, tareaEncontrada[0].hora, tareaEncontrada[0].horaFinalizacion,tareaEncontrada[0]._id);
             if (conflicto) {
                     const tarjetaVisual = document.getElementById(idTarea).parentElement;
 
@@ -149,11 +150,13 @@ export function inicializarTablero(tablero, diasSemana, seccionDescripcion) {
                     }
                     return;
                 } 
+
             tareaEncontrada[0].dia = fechaDropeo
-            
-            guardarDatos()
-            refrescarDia(fechaVieja, diasSemana)
+            await modificarTarea(tareaEncontrada[0]);
+
+            refrescarDia(fechaVieja, diasSemana)    
             refrescarDia(fechaDropeo, diasSemana)
+
             if (seccionDescripcion) {
                 seccionDescripcion.innerHTML = renderizarTarea(tareaEncontrada[0]);
             }

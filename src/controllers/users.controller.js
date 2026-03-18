@@ -19,7 +19,7 @@ async function getUsers(req, res) {
 }
 async function getUserId(req, res) {
     try {
-        const {id} = req.params;
+        const id = req.payload._id;
         const result = await usuariosSchema.findById(id)
         const tareas = await tareasSchema.find({ usuario_id: id, active: true });
 
@@ -66,7 +66,7 @@ async function addUser(req, res) {
 }
 async function deleteUser(req, res) {
     try {
-        const {id} = req.params
+        const id = req.payload._id;
         const result = await usuariosSchema.findByIdAndDelete(id)
         return res.json({
             ok:true,
@@ -81,9 +81,10 @@ async function deleteUser(req, res) {
 }
 async function editUser (req, res) {
     try {
-        const {id} = req.params
-        const {nombre, apellido, dni, correo, fechaNacimiento} = req.body 
-        const result = await usuariosSchema.findByIdAndUpdate(id, {nombre, apellido, dni, correo, fechaNacimiento}, { returnDocument: 'after' })
+        const id = req.payload._id;
+        const {nombre, apellido, dni, correo, fechaNacimiento, tema} = req.body 
+        const result = await usuariosSchema.findByIdAndUpdate(id, {nombre, apellido, dni, correo, fechaNacimiento, tema}, { returnDocument: 'after' })
+        
         return res.json({
             ok:true,
             data: result

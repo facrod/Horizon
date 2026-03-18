@@ -1,0 +1,206 @@
+/*NORMALIZANDO Y AGREGANDO FUENTES */
+
+@font-face {
+    font-family: 'miFuente';
+    src: url('../fonts/SNPro-VariableFont_wght.ttf') format('truetype');
+    
+}
+* {
+    margin: 0;
+    padding: 0;
+}
+body {
+    min-height: 100vh;
+    color: #F8FAFC;
+    font-family: 'miFuente', sans-serif;
+    font-weight: 100;
+}
+h1, h2, h3, h4 {
+    font-weight: 300;
+}
+
+
+/*BARRA DE NAVEGACION*/
+header {
+    position: sticky;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    display: flex;
+    padding: 1rem;
+    flex-direction: column;
+    align-items: center;
+    background-color: #334155;
+    transition: background-color .3s ease;
+}
+header.whiteMode {
+    background-color: #1c3d7a;
+}
+nav {
+    margin: .8rem;
+}
+nav li {
+    list-style: none;
+}
+nav li a{
+    color: white;
+    text-decoration: none;
+    font-weight: 300;
+    background-color: #1c49aa;
+    padding: .3rem;
+    border: 1px solid white;
+    border-radius: .5rem;
+    transition: background-color .3s ease;
+}
+nav li a:hover {
+    background-color: #2d8db6;
+}
+nav button {
+    background-color: red;
+    color:white;
+    border: 1px solid red;
+    border-radius: .5rem;
+    padding: .4rem 1rem;
+    position: absolute;
+    top: 25%;
+    left: 90%;
+    transition: background-color .3s ease, border .3s ease;
+    cursor: pointer;
+}
+nav button:hover {
+    background-color: rgb(204, 4, 4);
+    border: 1px solid white;
+}
+#toogle {
+    display: flex;
+    position: absolute;
+    left: 2%;
+    top: 20%;
+    background-color: rgb(196, 194, 194);
+    border-radius: 1rem;
+    cursor: pointer;
+}
+#darkMode {
+    padding: .4rem;
+    background-color: transparent;
+    border-radius: 1rem;
+    transition: all .3s ease;
+}
+#whiteMode {
+    padding: .4rem;
+    background-color: transparent;
+    border-radius: 1rem;
+    transition: all .3s ease;
+}
+#darkMode.activo{
+    background-color: white;
+    border-top-right-radius: 1rem;
+    border-bottom-right-radius: 1rem;
+}
+#whiteMode.activo {
+    background-color: white;
+    border-top-right-radius: 1rem;
+    border-bottom-right-radius: 1rem;
+}
+
+/*MAIN */
+
+main {
+    padding: 1rem;
+    background-color: #0F172A;
+    transition: background-color .3s ease;
+    height: 90vh;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    overflow: hidden;
+    overflow-y: scroll;
+}
+main.whiteMode {
+    background-color: #b4c7f0;
+}
+section.tarjeta {
+    background-color: white;
+    color: black;
+    max-width: 11rem;
+    flex: 0 0 11rem; 
+    height: 9rem;
+    border-radius: .5rem;
+    margin: .5rem .3rem;
+    padding: .5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+section.tarjeta p{
+    word-wrap: break-word;      
+    overflow-wrap: break-word;  
+    display: -webkit-box;
+    -webkit-line-clamp: 2; 
+    -webkit-box-orient: vertical;  
+    overflow: hidden;
+}
+section.tarjeta button {
+    margin-top: .5rem;
+    background-color: green;
+    color: white;
+    border: none;
+    padding: .3rem;
+    border-radius: .5rem;
+    cursor: pointer;
+}
+/*footer*/
+
+footer {
+    padding: 2rem;
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    background-color: #0F172A;
+    transition: background-color .3s ease;
+    font-size: 0.9rem;
+}
+footer.whiteMode {
+    background-color: #1c3d7a;
+}
+footer a {
+    text-decoration: none;
+    color: white;
+    transition: font-weight .3s ease;
+}
+footer a:hover{
+    font-weight: 500;
+}
+
+/*footer*/
+/*footer*/
+@media (max-width: 812px) {
+    section.tarjeta {
+        margin: 1rem;
+    }
+    #toogle {
+        left: 4%;
+        top: 11%;
+    }
+    #darkMode {
+        padding: .1rem .2rem .1rem .1rem;
+        margin: 0;
+    }
+    #whiteMode {
+        padding: .1rem .2rem .1rem .1rem;
+        margin: 0;
+    }
+    #mensajeEliminar {
+        width: 60%;
+    }
+    nav button {
+        left: 87%;
+        top: 11%;
+    }
+}
+@media (max-width: 480px) {
+    nav button {
+        left: 78%;
+        top: 11%;
+    }
+}

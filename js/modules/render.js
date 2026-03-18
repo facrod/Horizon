@@ -35,15 +35,15 @@ export function pintarTarea(tarea, diasSemana) {
     let diaSection = document.getElementById(diasSemana[diaIndex])
 
     diaSection.innerHTML += `
-    <section class="tarjeta" data-id="${tarea.id}" draggable="true">
-        <article class="tarjetaI" id="${tarea.id}">    
+    <section class="tarjeta" data-id="${tarea._id}" draggable="true">
+        <article class="tarjetaI" id="${tarea._id}">    
             <h4> Tarea </h4>        
             <p> ${tarea.tarea} </p>
             <h4> Horario </h4>
             <p> ${tarea.hora} </p>
         </article>
         <label class="labelTarjetaTablero">
-            <input type="checkbox"data-id="${tarea.id}" ${tarea.estado ? "checked" : ""} class="checkBoxTablero">
+            <input type="checkbox"data-id="${tarea._id}" ${tarea.estado ? "checked" : ""} class="checkBoxTablero">
             <img src="img/checkBlanco.png" alt="completado" class="imgCheckTablero"> 
         </label>
     </section>
@@ -64,7 +64,7 @@ export function refrescarDia(diaString, diasSemana) {
     tareas.filter(t => {
             let d = new Date(t.dia);
             return d.getUTCDay() === diaIndex;
-        })
+        }).sort((a, b) => a.hora.localeCompare(b.hora))
         .forEach(t => pintarTarea(t, diasSemana));
 }
 //REFRESCAR DESCRIPCION Y REENDERIZAR
@@ -106,20 +106,20 @@ export function renderizarTarea(tarjeta) {
         </form>
 
         <article class="acciones-descripcion">
-            <button class="accion-editar" data-id="${tarjeta.id}">
+            <button class="accion-editar" data-id="${tarjeta._id}">
                 <p>editar</p>    
                 <img src="img/editarBlanco.png" alt="editar">
             </button>
             <button class="accion-eliminar">
-                <p>eliminar</p>    
+                <p>Eliminar</p>    
                 <img src="img/eliminarBlanco.png" alt="elimininar">
             </button>
             <section id="mensajeEliminar">
                     <button class="cerrarModalBorrar" > <img src="img/cerrar.png" alt="cerrar"></button>
                     <p>Estas seguro que quieres eliminar la tarea?</P>
-                    <button class="eliminarBtn" id="btnEliminar" data-id="${tarjeta.id}">eliminar</button>
+                    <button class="eliminarBtn" id="btnEliminar" data-id="${tarjeta._id}">eliminar</button>
             </section>
-            <label class="custom-checkbox" data-id="${tarjeta.id}">
+            <label class="custom-checkbox" data-id="${tarjeta._id}">
                 <input type="checkbox" ${tarjeta.estado ? "checked" : ""}>
                 <span class="checkmark"> 
                     <img src="img/checkBlanco.png" alt="completado"> 

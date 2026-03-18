@@ -1,11 +1,11 @@
-import { tareas, eliminarTarea } from "../storage.js";
+import { tareas, eliminarTarea, modificarTarea } from "../storage.js";
 import { obtenerLimitesSemanales } from "../calendario.js";
 //-----------------------Acciones de la seccion descripcion------------------------------------------
 
 export function inicializarDescripcion(seccionDescripcion) {
 
     // EVENTO CLICK
-    seccionDescripcion.addEventListener("click", (e) => {
+    seccionDescripcion.addEventListener("click", async (e) => {
 
         // cerrar
         if (e.target.closest(".cerrar")) {
@@ -20,8 +20,7 @@ export function inicializarDescripcion(seccionDescripcion) {
             let inputsDescripcion = document.getElementById("seccionDescripcionInfo");
 
             let idTarea = e.target.closest(".accion-editar").dataset.id;
-            let tar = tareas.find(t => t.id == Number(idTarea));
-
+            let tar = tareas.find(t => t._id == idTarea);
             if (!inputsModificar.classList.contains("visible")) {
 
                 inputsModificar.classList.add("visible");
@@ -68,9 +67,9 @@ export function inicializarDescripcion(seccionDescripcion) {
 
         if (e.target.closest("#btnEliminar")) {
 
-            let tareaCapturadaId = Number(e.target.closest("#btnEliminar").dataset.id);
+            let tareaCapturadaId = e.target.closest("#btnEliminar").dataset.id;
 
-            eliminarTarea(tareaCapturadaId);
+            await eliminarTarea(tareaCapturadaId);
 
             mensajeEliminar.classList.remove("msjVisible");
 

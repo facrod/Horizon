@@ -26,6 +26,10 @@ const usuariosSchema = new Schema ({
         type: String,
         required: true,    
         unique: true,
+    },
+    tema: {
+        type: String,
+        default: "whiteMode"
     }
 })
 

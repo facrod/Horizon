@@ -15,14 +15,10 @@ body {
     font-family: 'miFuente', sans-serif;
     font-weight: 100;
 }
-
-/*NORMALIZANDO */
-
-/*MEJORANDO LOS TITULOS */
 h1, h2, h3, h4 {
     font-weight: 300;
 }
-/*MEJORANDO LOS TITULOS */
+
 
 /*BARRA DE NAVEGACION*/
 header {
@@ -40,85 +36,24 @@ header {
 header.whiteMode {
     background-color: #1c3d7a;
 }
-/*
 nav {
-    display: flex;
-    justify-content: center;
-    padding: .5rem;
+    margin: .8rem;
 }
-nav a {
-    color: white;
-    text-decoration: none;
-}
-#mostrarDias {
-    border: none;
-    background-color: transparent;
-    color: white;
-    cursor:pointer;
-}
-
-nav > ul {
-    display: flex;
-    gap: 1rem;
-    list-style: none;
-}
-
-animacion barra de dias 
-
-nav ul li {
-    position: relative;
-}
-#listaDias {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    
-    background: #334155;
-    list-style: none;
-    padding: 0.5rem 0;
-    border-radius: 8px;
-    transform: translateY(10px);
-
-    opacity: 0;
-    pointer-events: none;
-
-    transition: transform .4s ease, opacity .4s ease;
-}
-
-#listaDias.abierto {
-    opacity: 1;
-    pointer-events: auto;
-    transform: translateY(0);
-}
-#listaDias li {
-    padding: 0.5rem 1rem;
-}
-
-#listaDias li:hover {
-    background-color: #3a3a3a;
-}
-.login {
-    position: absolute;
-    top: 20%;
-    left: 90%;
-    padding: .8rem 0;
-    border-radius: 1rem;
-    background-color: green;
-    transition: background-color .3s ease;
-}
-.login a {
-    padding: 1rem;
-    font-weight: 100;
-    transition: font-weight .3s ease;
-}
-.login a:hover{
-    font-weight: 400;
-}
-.login:hover {
-    background-color: rgb(4, 170, 4);
-}*/
 nav li {
     list-style: none;
+}
+nav li a{
+    color: white;
+    text-decoration: none;
+    font-weight: 300;
+    background-color: #1c49aa;
+    padding: .3rem;
+    border: 1px solid white;
+    border-radius: .5rem;
+    transition: background-color .3s ease;
+}
+nav li a:hover {
+    background-color: #2d8db6;
 }
 nav button {
     background-color: red;
@@ -130,6 +65,7 @@ nav button {
     top: 25%;
     left: 90%;
     transition: background-color .3s ease, border .3s ease;
+    cursor: pointer;
 }
 nav button:hover {
     background-color: rgb(204, 4, 4);
@@ -166,9 +102,6 @@ nav button:hover {
     border-top-right-radius: 1rem;
     border-bottom-right-radius: 1rem;
 }
-/*animacion barra de dias */
-
-/*BARRA DE NAVEGACION*/
 
 /*MAIN */
 
@@ -724,7 +657,27 @@ footer a:hover{
     font-weight: 500;
 }
 /*footer*/
-
+@media (max-width: 812px) {
+    #toogle {
+        left: 4%;
+        top: 11%;
+    }
+    #darkMode {
+        padding: .1rem .2rem .1rem .1rem;
+        margin: 0;
+    }
+    #whiteMode {
+        padding: .1rem .2rem .1rem .1rem;
+        margin: 0;
+    }
+    #mensajeEliminar {
+        width: 60%;
+    }
+    nav button {
+        left: 87%;
+        top: 11%;
+    }
+}
 @media (max-width: 480px) {
  
     .acciones-descripcion {
@@ -755,26 +708,13 @@ footer a:hover{
         left: 85%;
         top: 8%;
     }
-}
-
-@media (max-width: 812px) {
-    #toogle {
-        left: 4%;
+    nav button {
+        left: 78%;
         top: 11%;
     }
-    #darkMode {
-        padding: .1rem .2rem .1rem .1rem;
-        margin: 0;
-    }
-    #whiteMode {
-        padding: .1rem .2rem .1rem .1rem;
-        margin: 0;
-    }
-    #mensajeEliminar {
-        width: 60%;
-    }
-
 }
+
+
 
 
 

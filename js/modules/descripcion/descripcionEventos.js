@@ -1,13 +1,13 @@
 import { obtenerTareaSolapada} from "../solapamientos.js"; 
 import { obtenerLimitesSemanales } from "../calendario.js";
-import { tareas, guardarDatos } from "../storage.js";
+import { tareas, guardarDatos, modificarTarea } from "../storage.js";
 import { refrescarDia, renderizarTarea } from "../render.js";
 import { diasSemana } from "../utils.js";
 
 export function inicializarDescripcionEventos (seccionDescripcion) {
     seccionDescripcion.addEventListener("change", (e) => {
                      //LOGICA DE HORARIOS EN EDITAR
-        // Corregir límites del calendario al cambiar el día
+        // Corregir limites del calendario al cambiar el dia
         let inputModificarDia = document.getElementById("diaModificado");
         if (inputModificarDia) {
             const limites = obtenerLimitesSemanales();
@@ -16,7 +16,6 @@ export function inicializarDescripcionEventos (seccionDescripcion) {
         }
 
         // Sincronizar hora de inicio con hora de fin
-        // Usamos e.target.id para ser precisos
         if (e.target.id === "horaModificada") {
             let horaFinalizacionModificada = document.getElementById("horaTareaFinalizacionModificada");
             if (horaFinalizacionModificada) {
@@ -42,11 +41,11 @@ export function inicializarDescripcionEventos (seccionDescripcion) {
 
             // EDITAR (FUNCIONALIDAD)
 
-    seccionDescripcion.addEventListener("submit", (e) => {
+    seccionDescripcion.addEventListener("submit", async (e) => {
         if (e.target.id === "inputsModificar") {
             e.preventDefault(); 
-            let idTarea = Number(e.target.dataset.id);
-            let tar = tareas.find(t => t.id === idTarea);
+            let idTarea = e.target.dataset.id;
+            let tar = tareas.find(t => t._id === idTarea);
 
             let nuevaFecha = document.getElementById("diaModificado").value;
             let nuevaHoraInicio = document.getElementById("horaModificada").value;
@@ -76,7 +75,8 @@ export function inicializarDescripcionEventos (seccionDescripcion) {
             tar.horaFinalizacion = nuevaHoraFinalizacion
 
             tareas.sort((a, b) => a.hora.localeCompare(b.hora));
-            guardarDatos();
+            console.log(tar)
+            await modificarTarea(tar);
         
             refrescarDia(fechaVieja, diasSemana); 
 
@@ -96,23 +96,23 @@ export function inicializarDescripcionEventos (seccionDescripcion) {
     });
 
             // CHECKBOX 
-    seccionDescripcion.addEventListener("change", (e) => {
+    seccionDescripcion.addEventListener("change", async (e) => {
         if (!e.target.matches('input[type="checkbox"]')) return;
 
         const label = e.target.closest(".custom-checkbox");
-        const tareaEncontrada = tareas.find(t => t.id === Number(label.dataset.id));
+        const tareaEncontrada = tareas.find(t => t._id === label.dataset.id);
         if (!tareaEncontrada) return;
 
         tareaEncontrada.estado = e.target.checked;
 
-        guardarDatos()
+        await modificarTarea(tareaEncontrada)
         let msjEstado = document.getElementsByClassName("estadoMsj")
         if (e.target.checked) {
             msjEstado[0].textContent = "Estado: Completa";
         } else {
             msjEstado[0].textContent = "Estado: Incompleta";
         }
-        const checkboxTablero = document.querySelector(`.checkBoxTablero[data-id="${tareaEncontrada.id}"]`);
+        const checkboxTablero = document.querySelector(`.checkBoxTablero[data-id="${tareaEncontrada._id}"]`);
         
         if (checkboxTablero) {
             // Le pasamos el mismo estado (true/false) que tiene el de la descripción

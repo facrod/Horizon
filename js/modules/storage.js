@@ -48,10 +48,73 @@ export async function guardarDatos(nuevaTarea) {
         return { ok: false, error: "Error de conexión" };
     }
 }
+export async function modificarTarea (tareaModificada) {
+    try {
+        const idTarea = tareaModificada._id;
+        const response = await fetch(`${API_URL}/tareas/${idTarea}`, {
+            method: "PUT",
+            headers: obtenerHeaders(),
+            body: JSON.stringify(tareaModificada)
+        });
+        const res = await response.json();
+        if (res.ok) {
+            tareas = tareas.map(t => t._id === idTarea ? res.data : t);
+            return { ok: true, data: res.data };
+        } else {
+            return { ok: false, error: res.error };
+        }     
+    } catch (error) {
+        return { ok: false, error: "Error de conexión" };
+    } 
+}
+export async function eliminarTarea(tareaId) {
+    try {
+        const id = tareaId;
+        const response = await fetch(`${API_URL}/tareas/${id}`, {
+            method: "DELETE",
+            headers: obtenerHeaders(),
+        });
+        const res = await response.json()
+        if (res.ok) {
+            tareas = tareas.filter(t => t._id !== id);
+            return { ok: true, data: res.data };
+        } else {
+            return { ok: false, error: res.error };
+        }
+    } catch (error) {
+        return { ok: false, error: "Error de conexión" };
+    }
+}
 
-
-//GUARDAR TAREAS EN EL LOCAL 
-export function eliminarTarea(id) {
-    tareas = tareas.filterW(t => t.id !== id);
-    guardarDatos();
+export async function cargarTareasEliminadas () {
+    try {
+        const response = await fetch (`${API_URL}/tareas/eliminadas`, {
+            method: "GET",
+            headers: obtenerHeaders()
+        });
+        const res = await response.json()
+        if(res.ok) {
+            return {ok: true, data: res.data}
+        } else {
+            return {ok: false, error: res.error}
+        }
+     } catch (error) {
+        return {ok: false, error: "Error de conexión"}
+    }   
+}
+export async function activarTarea(tareaId) {
+    try {
+        const response = await fetch(`${API_URL}/tareas/activate/${tareaId}`, {
+            method: "PUT",
+            headers: obtenerHeaders(),
+        });
+        const res = await response.json();
+        if (res.ok) {
+            return { ok: true, data: res.data };
+        } else {
+            return { ok: false, error: res.error };
+        }
+    } catch (error) {
+        return { ok: false, error: "Error de conexión" };
+    }
 }
