@@ -1,4 +1,4 @@
-const API_URL = "http://localhost:3000/api";
+const API_URL = "horizon-production-46a9.up.railway.app";
 
 export let tareas = []
 
