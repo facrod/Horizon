@@ -3,7 +3,7 @@ import { getUsers, getUserId, deleteUser, editUser, addUser,login } from "../con
 import { authenticate } from "../helpers/token.helper.js";
 const router = express.Router()
 
-router.get("/usuario", getUsers)
+router.get("/usuario", authenticate, getUsers)
 
 router.post("/usuario/login", login)
 

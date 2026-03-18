@@ -8,7 +8,7 @@ Horizon es un organizador de tareas reactivo construido exclusivamente con **Van
 
 - **Dynamic Rendering:** Arquitectura basada en funciones de JS para la inyección de componentes en el DOM.
 - **Event Delegation:** Gestión centralizada de interacciones mediante `e.target.closest()`, optimizando el uso de memoria.
-- **Data Persistence:** Sincronización completa con `LocalStorage`.
+- **Data Persistence:** Sincronización completa con `MongoDB`.
 - **Advanced CSS:** Implementación del selector relacional `:has()` para estados de UI dinámicos sin dependencia de JS adicional.
 - **Real-time Sync:** Lógica de refresco automático de vistas ante cambios en el modelo de datos.
 

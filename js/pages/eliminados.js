@@ -52,10 +52,6 @@ botonesEstilos.addEventListener("click", async (e)=>{
             mainEstilos.classList.remove("whiteMode")
             headerEstilos.classList.remove("whiteMode")
             footerEstilos.classList.remove("whiteMode")
-            for (let i = 0; i < columnasEstilos.length; i++) {
-                columnasEstilos[i].classList.remove("whiteMode") 
-            }
-            formAgregar.classList.remove("whiteMode");
         }
     }
     if (e.target.closest("#whiteMode")) {
@@ -67,10 +63,6 @@ botonesEstilos.addEventListener("click", async (e)=>{
             mainEstilos.classList.add("whiteMode")
             headerEstilos.classList.add("whiteMode")
             footerEstilos.classList.add("whiteMode")
-            for (let i = 0; i < columnasEstilos.length; i++) {
-                columnasEstilos[i].classList.add("whiteMode") 
-            }
-            formAgregar.classList.add("whiteMode");
         }        
 
     }
