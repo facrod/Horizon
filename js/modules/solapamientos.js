@@ -22,7 +22,7 @@ export function obtenerTareaSolapada(dia, inicio, fin, idActual = null) {
 
         // Si el ID coincide con idActua', es la misma tarea que estamos editando.
         // La ignoramos para que no choque contra sí misma.
-        if (idActual && t.id === idActual) {
+        if (idActual && t._id === idActual) {
             return false;
         }
 
