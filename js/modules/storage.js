@@ -1,4 +1,4 @@
-const API_URL = "https://horizon-production-6288.up.railway.app/";
+const API_URL = "https://horizon-production-6288.up.railway.app";
 
 export let tareas = []
 
