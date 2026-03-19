@@ -46,6 +46,17 @@ async function addUser(req, res) {
             fechaNacimiento,
             password: pw
         })
+        const hoy = new Date();
+        const dia = `${hoy.getFullYear()}-${String(hoy.getMonth() + 1).padStart(2, '0')}-${String(hoy.getDate()).padStart(2, '0')}`;
+        await tareasSchema.create({
+            tarea: "¡Bienvenido a Horizon!🚀",
+            descripcion: "Planificá tus tareas para tener una vida más organizada. Podés agregar, editar, eliminar y marcar tareas como completadas. También podés arrastrar las tarjetas entre días. ¡Empezá creando tu primera tarea!",
+            dia: dia,
+            hora: "09:00",
+            horaFinalizacion: "10:00",
+            usuario_id: result._id,
+            estado: false,
+        })
         return res.json({
             ok:true,
             data: result
