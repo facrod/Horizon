@@ -1,4 +1,4 @@
-const API = "http://localhost:3000/api";
+const API = "https://horizon-production-6288.up.railway.app/api";
 
 
 //router.get("/usuario/:id", getUserId)

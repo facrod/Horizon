@@ -17,4 +17,4 @@ app.use(prefix, routerTareas)
 app.use(prefix, routerUsers)
 
 connect()
- app.listen(process.env.PORT || 3000, "0.0.0.0", () => console.log("Servidor corriendo en puerto 3000"));
+ app.listen(3000, () => console.log("Servidor corriendo en puerto 3000"));
