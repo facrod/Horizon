@@ -7,7 +7,6 @@ import { diasSemana } from "../utils.js";
 export function inicializarDescripcionEventos (seccionDescripcion) {
     seccionDescripcion.addEventListener("change", (e) => {
                      //LOGICA DE HORARIOS EN EDITAR
-        // Corregir limites del calendario al cambiar el dia
         let inputModificarDia = document.getElementById("diaModificado");
         if (inputModificarDia) {
             const limites = obtenerLimitesSemanales();

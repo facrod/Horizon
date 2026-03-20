@@ -15,7 +15,6 @@ export function inicializarTablero(tablero, diasSemana, seccionDescripcion) {
 
         // Le "pegamos" el ID al contenedor de la descripción como una etiqueta invisible
         seccionDescripcion.dataset.tareaActivaId = tareaId;
-        //REPASAR FUERTEMENTE ESTO
         //si esta visible prendemos(fade-out)
         if (seccionDescripcion.classList.contains("activo")) {
 
@@ -55,12 +54,10 @@ export function inicializarTablero(tablero, diasSemana, seccionDescripcion) {
         
         tareaClickeada.estado = !tareaClickeada.estado; 
 
-        //Añadir función para modificar tarea existente
         modificarTarea(tareaClickeada);
         let idAbierto = seccionDescripcion.dataset.tareaActivaId;
         
         if (seccionDescripcion.classList.contains("activo") && idAbierto === idCheckboxTarjeta) {
-            // Re-renderizamos la descripción para que cambie el texto e ícono al instante
             seccionDescripcion.innerHTML = renderizarTarea(tareaClickeada);
         }
     })
@@ -85,7 +82,7 @@ export function inicializarTablero(tablero, diasSemana, seccionDescripcion) {
         localStorage.setItem("idTarea", JSON.stringify(tarjetaArrastrada))
     })
     tablero.addEventListener("dragover", (e) => {
-        e.preventDefault(); // Esto habilita el lugar como válido para el drop
+        e.preventDefault();
     });
     tablero.addEventListener("drop", async (e)=>{
         e.preventDefault();
