@@ -48,9 +48,13 @@ async function addUser(req, res) {
         })
         try {
             const hoy = new Date();
-            const dia = `${hoy.getFullYear()}-${String(hoy.getMonth() + 1).padStart(2, '0')}-${String(hoy.getDate()).padStart(2, '0')}`;
+            const diaActual = hoy.getUTCDay();
+            const diferenciaAlLunes = diaActual === 0 ? 6 : diaActual - 1;
+            const lunes = new Date(hoy);
+            lunes.setUTCDate(hoy.getUTCDate() - diferenciaAlLunes);
+            const dia = `${lunes.getUTCFullYear()}-${String(lunes.getUTCMonth() + 1).padStart(2, '0')}-${String(lunes.getUTCDate()).padStart(2, '0')}`;
             await tareasSchema.create({
-                tarea: "¡Bienvenido a Horizon!",
+                tarea: "¡Bienvenido a Horizon! 🚀 CLICKEAME PARA VER MÁS",
                 descripcion: "Planificá tus tareas para tener una vida más organizada.",
                 dia,
                 hora: "09:00",
